@@ -1,8 +1,9 @@
 = SAM
 :sam-specs: https://samtools.github.io/hts-specs/SAMv1.pdf
+:cram-specs: https://samtools.github.io/hts-specs/CRAMv3.pdf
 
 Sequence Alignment/Map format is a TAB-delimited text format for storing sequence
-alignment information. Please see {sam-specs}[here^] for the full format specification.
+alignment information. See {sam-specs}[here^] for the full format specification.
 
 == Header
 
@@ -84,4 +85,4 @@ compressed file.
 
 CRAM is a framework technology with highly efficient and tunable reference-based compression of sequence data  and a data format
 that is directly available for computational use. It supports different compression formats (gzip, bzip2, CRAM records). CRAM records
-use a wide range of lossless and lossy encoding strategies.
+use a wide range of lossless and lossy encoding strategies. See {cram-specs}[here^] for the full format specification.
