@@ -37,7 +37,7 @@ gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000021375"; exon_number "2
 <5> `end`     - The ending position of the feature (inclusive).
 <6> `score`   - A score between 0 and 1000.
 <7> `strand`  - Valid entries include `+`, `-`, or `.` (for don't know/don't care).
-<8> `frame`   - If the feature is a coding exon, frame should be a number between 0-2 that represents the reading frame of the first base. If the feature is not a coding exon, the value should be '.'.
+<8> `frame`   - If the feature is a coding exon, frame should be a number between 0-2 that represents the reading frame of the first base. If the feature is not a coding exon, the value should be `.`.
 <9> `group`   - All lines with the same group are linked together into a single item. Note the `gene_id` and `transcript_id` mandatory attributes.
 
 
