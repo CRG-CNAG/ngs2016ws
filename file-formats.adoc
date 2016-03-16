@@ -3,10 +3,12 @@
 
 :leveloffset: +1
 
-include::sam-format.adoc[]
-
 include::fastq-format.adoc[]
 
+include::sam-format.adoc[]
+
 include::gtf-format.adoc[]
+
+include::bed-format.adoc[]
 
 :leveloffset: -1
