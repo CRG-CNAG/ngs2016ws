@@ -1,8 +1,5 @@
 = Common file formats
-:stem:
 :icons: font
-:gff-format: https://genome.ucsc.edu/FAQ/FAQformat.html#format3
-:fastq-encoding: https://en.wikipedia.org/wiki/FASTQ_format#Encoding
 
 :leveloffset: +1
 

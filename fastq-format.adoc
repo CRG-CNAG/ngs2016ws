@@ -1,4 +1,6 @@
 = FASTQ
+:stem:
+:fastq-encoding: https://en.wikipedia.org/wiki/FASTQ_format#Encoding
 
 FASTQ is a text-based format for storing biological sequences and their corresponding quality scores.
 

@@ -1,4 +1,5 @@
 = GTF
+:gff-format: https://genome.ucsc.edu/FAQ/FAQformat.html#format3
 
 GTF (Gene Transfer Format) is a refinement to {gff-format}[GFF^] that tightens the specification. The first eight GTF fields are the same as GFF. The group field has been expanded into a list of attributes. Each attribute consists of a `type`/`value` pair. Attributes must end in a semi-colon, and be separated from any following attribute by exactly one space.
 
