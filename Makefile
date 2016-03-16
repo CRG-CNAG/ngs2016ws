@@ -11,6 +11,7 @@ README = hands-on.adoc
 CHEATSHEET = cheatsheet.adoc
 DEPLOY_LIST = deploy-list.txt
 PDF = pdf
+PDF_STYLE = crg
 
 all: html pdf
 
@@ -25,11 +26,11 @@ $(CHEATSHEET_HTML): setup $(CHEATSHEET)
 
 pdf: $(PDF_FILE) $(CHEATSHEET_PDF)
 $(PDF_FILE): setup $(README)
-	@GEM_HOME=$(GEMS) $(GEMS)/bin/asciidoctor-pdf $(README) -a pdf-stylesdir=$(PDF)/style -a pdf-style=crg -a pdf-fontsdir=$(PDF)/font
+	@GEM_HOME=$(GEMS) $(GEMS)/bin/asciidoctor-pdf $(README) -a pdf-stylesdir=$(PDF)/style -a pdf-style=$(PDF_STYLE) -a pdf-fontsdir=$(PDF)/font
 		@echo == Written file $(PDF_FILE)
 
 $(CHEATSHEET_PDF): setup $(CHEATSHEET)
-	@GEM_HOME=$(GEMS) $(GEMS)/bin/asciidoctor-pdf $(CHEATSHEET) -a pdf-stylesdir=$(PDF)/style -a pdf-style=crg -a pdf-fontsdir=$(PDF)/font
+	@GEM_HOME=$(GEMS) $(GEMS)/bin/asciidoctor-pdf $(CHEATSHEET) -a pdf-stylesdir=$(PDF)/style -a pdf-style=$(PDF_STYLE) -a pdf-fontsdir=$(PDF)/font
 		@echo == Written file $(CHEATSHEET_PDF)
 
 setup: $(GEMS)/bin/asciidoctor $(GEMS)/bin/asciidoctor-pdf
