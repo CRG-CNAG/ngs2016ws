@@ -1,0 +1,54 @@
+= GTF
+
+GTF (Gene Transfer Format) is a refinement to {gff-format}[GFF^] that tightens the specification. The first eight GTF fields are the same as GFF.
+
+[cols="1,l,1",options="autowidth"]
+|===
+| {counter:index} | seqname | The name of the sequence. Must be a chromosome or scaffold.
+| {counter:index} | source  | The program that generated this feature.
+| {counter:index} | feature | The name of this type of feature. Some examples of standard feature types are "CDS", "start_codon", "stop_codon", and "exon".
+| {counter:index} | start   | The starting position of the feature in the sequence. The first base is numbered 1.
+| {counter:index} | end     | The ending position of the feature (inclusive).
+| {counter:index} | score   | A score between 0 and 1000. If the track line useScore attribute is set to 1 for this annotation data set, the score value will determine the level of gray in which this feature is displayed (higher numbers = darker gray). If there is no score value, enter ".".
+| {counter:index} | strand  | Valid entries include '+', '-', or '.' (for don't know/don't care).
+| {counter:index} | frame   | If the feature is a coding exon, frame should be a number between 0-2 that represents the reading frame of the first base. If the feature is not a coding exon, the value should be '.'.
+| {counter:index} | group   | All lines with the same group are linked together into a single item.
+|===
+
+The group field has been expanded into a list of attributes. Each attribute consists of a `type`/`value` pair. Attributes must end in a semi-colon, and be separated from any following attribute by exactly one space.
+
+The attribute list must begin with the two mandatory attributes:
+
+[cols="10l,90"]
+|===
+| gene_id       | A globally unique identifier for the genomic source of the sequence.
+| transcript_id | A globally unique identifier for the predicted transcript.
+|===
+
+.Ninth field in a GTF data line
+[source,attributes]
+----
+gene_id "Em:U62317.C22.6.mRNA"; transcript_id "Em:U62317.C22.6.mRNA"; exon_number 1
+----
+
+.A whole GTF data line
+[source,gtf]
+----
+chr12   ENSEMBL exon    60059370        60061073        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000021375"; exon_number "20"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-001"; transcript_type "protein_coding";
+----
+
+== Feature types
+
+The third field in the GFF specification represents feature type for the line. Some common features are `CDS` and `exon`.
+
+.Different types of feature
+[source,gtf]
+----
+chr12   ENSEMBL exon    60083555        60083691        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "1"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
+chr12   ENSEMBL stop_codon      60060984        60060986        .       -       0       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000165134"; exon_number "18"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-004"; transcript_type "protein_coding";
+chr12   ENSEMBL start_codon     60108195        60108197        .       -       0       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000165134"; exon_number "1"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-004"; transcript_type "protein_coding";
+chr12   ENSEMBL transcript      60073977        60083691        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "4"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
+chr12   ENSEMBL intron  60079551        60083554        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "1"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
+chr12   ENSEMBL CDS     60060987        60061073        .       -       0       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000165134"; exon_number "18"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-004"; protein_id "ENSMUSP00000126011"; transcript_type "protein_coding";
+chr12   ENSEMBL gene    60059370        60113004        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUSG00000020986"; gene_type "protein_coding"; gene_status "NULL"; gene_name "Sec23a"; transcript_type "protein_coding"; transcript_status "NULL"; transcript_name "Sec23a";
+----
