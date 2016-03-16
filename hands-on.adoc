@@ -34,6 +34,8 @@ include::ant-cluster.adoc[tags=access]
 
 include::rna-seq-data.adoc[]
 
+include::file-formats.adoc[]
+
 include::gene-annotation.adoc[]
 
 include::rna-seq-processing.adoc[]
