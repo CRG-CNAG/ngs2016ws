@@ -6,6 +6,8 @@ ifeval::["{backend}" == "html5"]
 :stylesdir: ./css
 :stylesheet: crg.css
 :linkcss:
+:source-highlighter: highlight.js
+:highlightjs-theme: github
 :toc: left
 :cheatsheet: cheatsheet.adoc#,here
 endif::[]
@@ -37,6 +39,8 @@ include::rna-seq-data.adoc[]
 include::file-formats.adoc[]
 
 include::gene-annotation.adoc[]
+
+include::https://raw.githubusercontent.com/guigolab/grape-nf/asciidoctor/docs/src/quickstart.adoc[]
 
 include::rna-seq-processing.adoc[]
 
