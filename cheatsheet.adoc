@@ -1,4 +1,4 @@
-= CRG RNAseq course cheatsheet
+= NGS 2016 Workshop Cheatsheet
 :sectnums:
 :hide-uri-scheme:
 :nofooter:
