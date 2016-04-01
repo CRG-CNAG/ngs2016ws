@@ -1,42 +1,31 @@
 = RNAseq data
-:setup_script: /no_backup_isis/rg/projects/courses/rnaseq/setup2015nov
+:user: ngs00
 
-In order to get all the required files for the hands-on you need to run the following command in your terminal:
+All the data needed for the workshop can be found in:
 
 [source,bash, subs="attributes"]
 ----
-{setup_script}
+/users/{user}
 ----
 
 The setup script copies all the required files into the `rnaseq` folder under your `$HOME`. You can see the contents of the directory in a tree-like format as follows:
 
 [source,bash]
 ----
-tree ~/rnaseq
+tree ~ngs00
 ----
 
 And this should be the output:
 
 [source,bash]
 ----
-/users/<group>/<username>/rnaseq
+/users/ngs00
 ├── bin
-│   ├── BAMstats.py
-│   ├── dashboard2tsv.py
-│   ├── DESeq.analysis.R
-│   ├── edgeR.analysis.R
-│   ├── gff2gff.awk
-│   ├── ggheatmap.R
-│   ├── GO_enrichment.R
-│   ├── matrix_to_dist.R
-│   ├── normalize.matrix.R
-│   ├── retrieve_element_rpkms.py
-│   ├── rpkm_distribution.R
-│   ├── selectMatrixRows.sh
-│   ├── terrain.colors.3.txt
-│   ├── TrtoGn_RPKM.sh
-│   └── VennDiagram.R
+│   ├── hubCheck
+│   ├── nextflow
+│   └── ngs-grape
 ├── data
+│   ├── index.tsv
 │   ├── mouse_cns_E14_rep1_1.fastq.gz
 │   ├── mouse_cns_E14_rep1_2.fastq.gz
 │   ├── mouse_cns_E14_rep2_1.fastq.gz
@@ -44,11 +33,57 @@ And this should be the output:
 │   ├── mouse_cns_E18_rep1_1.fastq.gz
 │   ├── mouse_cns_E18_rep1_2.fastq.gz
 │   ├── mouse_cns_E18_rep2_1.fastq.gz
-│   ├── mouse_cns_E18_rep2_2.fastq.gz
-│   ├── quantifications.index.tsv
-│   └── quantifications.index.txt
+│   └── mouse_cns_E18_rep2_2.fastq.gz
+├── env
+├── grape
+│   └── nextflow.config
+├── ngs.config
+├── public_docs
+│   ├── custom_tracks
+│   │   ├── mouse_cns_E14_rep1_m4_n10_toGenome.bam
+│   │   ├── mouse_cns_E14_rep1.Unique.minusRaw.bw
+│   │   ├── mouse_cns_E14_rep1.Unique.plusRaw.bw
+│   │   ├── mouse_cns_E14_rep2_m4_n10_toGenome.bam
+│   │   ├── mouse_cns_E14_rep2.Unique.minusRaw.bw
+│   │   ├── mouse_cns_E14_rep2.Unique.plusRaw.bw
+│   │   ├── mouse_cns_E18_rep1_m4_n10_toGenome.bam
+│   │   ├── mouse_cns_E18_rep1.Unique.minusRaw.bw
+│   │   ├── mouse_cns_E18_rep1.Unique.plusRaw.bw
+│   │   ├── mouse_cns_E18_rep2_m4_n10_toGenome.bam
+│   │   ├── mouse_cns_E18_rep2.Unique.minusRaw.bw
+│   │   └── mouse_cns_E18_rep2.Unique.plusRaw.bw
+│   ├── prova
+│   └── track_hub
+│       ├── dataFiles.list
+│       ├── genomes.txt
+│       ├── hub.txt
+│       ├── mm9
+│       │   └── trackDb.txt
+│       ├── mm9_cns_E14_rep1_m4_n10_toGenome.bam
+│       ├── mm9_cns_E14_rep1_Unique_minusRaw.bw
+│       ├── mm9_cns_E14_rep1_Unique_plusRaw.bw
+│       ├── mm9_cns_E14_rep2_m4_n10_toGenome.bam
+│       ├── mm9_cns_E14_rep2_Unique_minusRaw.bw
+│       ├── mm9_cns_E14_rep2_Unique_plusRaw.bw
+│       ├── mm9_cns_E18_rep1_m4_n10_toGenome.bam
+│       ├── mm9_cns_E18_rep1_Unique_minusRaw.bw
+│       ├── mm9_cns_E18_rep1_Unique_plusRaw.bw
+│       ├── mm9_cns_E18_rep2_m4_n10_toGenome.bam
+│       ├── mm9_cns_E18_rep2_Unique_minusRaw.bw
+│       ├── mm9_cns_E18_rep2_Unique_plusRaw.bw
+│       ├── trackHubDefinition.json
+│       └── trackHubDefinition.json~
+├── quickTrackHub
+│   ├── LICENSE
+│   ├── processJsonToHash.pm
+│   ├── quickTrackHub.pl
+│   ├── README.md
+│   └── trackHubDefinition.json
 └── refs
+    ├── dmel-all-no-analysis-r6.05.gtf
+    ├── gencode.v22.annotation.gtf
     ├── mm65.long.ok.gtf
+    ├── mouse_genome_mm9.fa
     ├── mouse_genome_mm9.fa.fai
     ├── mouse_genome_mm9_RSEM_index
     │   ├── RSEMref.chrlist
@@ -58,9 +93,22 @@ And this should be the output:
     │   ├── RSEMref.seq
     │   ├── RSEMref.ti
     │   └── RSEMref.transcripts.fa
-    └── mouse_genome_mm9_STAR_index -> /no_backup_isis/rg/projects/courses/rnaseq/refs/mouse_genome_mm9_STAR_index
+    └── mouse_genome_mm9_STAR_index
+        ├── chrLength.txt
+        ├── chrNameLength.txt
+        ├── chrName.txt
+        ├── chrStart.txt
+        ├── exonGeTrInfo.tab
+        ├── exonInfo.tab
+        ├── geneInfo.tab
+        ├── Genome
+        ├── genomeParameters.txt
+        ├── SA
+        ├── SAindex
+        ├── sjdbInfo.txt
+        ├── sjdbList.fromGTF.out.tab
+        ├── sjdbList.out.tab
+        └── transcriptInfo.tab
 
-5 directories, 34 files
+13 directories, 76 files
 ----
-
-NOTE: **STAR** index folder has been soft linked because of its size
