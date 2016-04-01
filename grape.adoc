@@ -45,10 +45,12 @@ process {
 	queue    = 'NGS'
 	penv = 'smp'
 }
+
+includeConfig "/users/{userq}/ngs.config"
 ----
 
 
 [source,cmd]
 ----
-nextflow -bg run grape-nf --steps mapping,bigwig --index /users/ngs01/data/index.tsv --genome /users/ngs01/refs/mouse_genome_mm9.fa --annotation /users/ngs01/refs/mm65.long.ok.gtf -resume > pipeline.log
+nextflow -bg run grape-nf --steps mapping,bigwig -resume > pipeline.log
 ----
