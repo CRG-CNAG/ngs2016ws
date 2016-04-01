@@ -11,4 +11,6 @@ include::gtf-format.adoc[]
 
 include::bed-format.adoc[]
 
+include::bigwig-format.adoc[]
+
 :leveloffset: -1
