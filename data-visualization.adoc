@@ -1,0 +1,258 @@
+= RNA-seq data visualization in the UCSC Genome Browser
+:source-highlighter: highlight.js
+:highlightjs-theme: github
+
+
+The http://genome.ucsc.edu/cgi-bin/hgGateway[UC Santa Cruz Genome Browser^] provides a great way to visualize genomic data in context.
+
+NOTE: http://www.ensembl.org/index.html[ENSEMBL^] is a similar tool, however we'll focus on the UCSC Browser in this tutorial.
+
+NOTE: UCSC has a European mirror http://genome-euro.ucsc.edu/cgi-bin/hgGateway[here^]
+
+The UCSC Browser contains many publicly available datasets (ENCODE data, ESTs, RefSeq, GENCODE gene models, etc.) organized in tracks. This is its "core" set of tracks, which can be turned on and off at will (see <<Track display>> below).
+
+You can also add your own data to it, via <<Custom Tracks>> and <<Track Hubs>>.
+
+In this part of the tutorial, we'll learn how to use the UCSC Browser to visualize the data you've just generated with GRAPE (BAMs and bigWigs).
+
+== Basics
+
+TIP: A lot of UCSC training resources are available http://genome.ucsc.edu/training/index.html[here^].
+
+=== Accessing a locus / genome position
+
+We'll be looking at the top two differentially expressed genes in our dataset:
+
+[cols="3*", options="header"]
+|===
+|ENSEMBL id
+|Genome position (mm9)
+|Differential expression
+
+|`ENSMUSG00000052187`
+|`chr7:111,000,259-111,001,754`
+|E14 > E18
+
+|`ENSMUSG00000032936`
+|`chr9:107,838,251-107,852,022`
+|E14 < E18
+|===
+
+You can input ENSEMBL ids, gene symbols or genome positions into the search box at the top of the page. Hit enter and you'll be taken to the region of your gene of interest, which will be highlighted in the image.
+
+=== Track display
+Each track can be displayed with different levels of detail. These are, in ascending order:
+
+* hide
+* dense
+* squish
+* pack
+* full
+
+You can access these settings either through individual *drop-down track menus* below the genome image:
+
+image:AC114783.5.png[UCSC-drop-down1,300,300, align="center"]
+
+or by *right-clicking* the corresponding area on the image:
+
+image:AC114783.6.png[UCSC-drop-down2,350,350, align="center"]
+
+
+== Visualizing your own data
+
+* Set custom shell environment:
+
+[source,cmd]
+----
+source ~ngs00/env/.ngsenv
+----
+
+=== Custom Tracks
+
+The easiest way to load your data into the UCSC Browser is through a http://genome.ucsc.edu/goldenPath/help/customTrack.html[Custom Track^].
+
+First, we need to make this data accessible from the web, so that UCSC can download it. In your home directory you will find a `public_docs/` folder, which is reachable through HTTP at this address: http://public-docs.crg.es/NGS/[`http://public-docs.crg.es/NGS/$USER`^] (replace `$USER` with your `ngsXX` username, or type
+
+[source,cmd]
+----
+echo http://public-docs.crg.es/NGS/$USER
+----
+
+in your terminal, and paste the output in your Web browser).
+
+
+* Make Custom Track directory (web-accessible through `\http://public-docs.crg.es/NGS/$USER/custom_tracks/`)
+
+[source,cmd]
+----
+mkdir -p $customTrackDir
+----
+
+
+
+* Copy GRAPE output files there (bigWigs + BAMs)
+
+[source,cmd]
+----
+awk '$5~/GenomeAlignment|^PlusRawSignal|^MinusRawSignal/{print $3}' $grapeDb | while read f; do
+	# copy data files:
+	rsync -av $f $customTrackDir
+	# copy BAM indices as well:
+	[[ "$f" =~ bam$ ]] && rsync -av $f.bai $customTrackDir/$f.bai
+done
+----
+
+WARNING: Custom tracks are viewable only on the machine from which they were uploaded and are automatically discarded *48 hours* after the last time they are accessed, unless they are saved in a http://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#CTs[Session^] (in which case UCSC will erase them after *4 months*). For a permanent solution, use <<Track Hubs>> instead.
+
+
+=== Track Hubs
+
+http://genome.cse.ucsc.edu/goldenPath/help/hgTrackHubHelp.html[Track Hubs^] can be thought of as a *_permanent_*, more *_customizable_* version of Custom Tracks.  Another important difference is that none of its data is stored at UCSC, but on your server.
+
+Although originally developed at UCSC, they are also http://www.ensembl.org/info/website/adding_trackhubs.html[supported by ENSEMBL^].
+
+WARNING: ENSEMBL doesn't accept mm9 track hubs any longer, so our test dataset won't work in it.
+
+
+Track Hubs are very powerful: they allow you to reach the same level of sophistication as some "core" ENCODE tracks such as http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeCshlLongRnaSeq[this one^]:
+
+image:AC114783.7.png[UCSC-mouseEncode-longRNAtracks,650,650, align="center"]
+
+They are relatively complex to set up, though. Here we will use the custom https://github.com/julienlag/quickTrackHub[`quickTrackHub`^] framework to make this task easier.
+
+* First, create a new public subdirectory for the Track Hub
+
+[source,cmd]
+----
+mkdir -p $trackHubDir
+----
+
+
+* Copy the Custom Track data files there and rename them.
+
+NOTE: The Track Hub will be organized based on the metadata contained in the file names (tissue, file extension, replicate number, genome version, etc.). GRAPE's native output filenames are not (yet) `quickTrackHub`-compliant, this is why we need this renaming extra step.
+
+
+[source,cmd]
+----
+for f in `find $customTrackDir/ -type f`; do
+    outFile=$(basename $f)
+    outFile=${outFile/mouse/mm9}
+    outFile=${outFile//.Unique./_Unique_}
+    rsync -av $f $trackHubDir/$outFile
+    [[ "$f" =~ bam$ ]] && rsync -av $f.bai $trackHubDir/$outFile.bai
+done
+----
+
+
+* Download `quickTrackHub` from its github repository to your home directory:
+
+[source,cmd]
+----
+cd $HOME
+git clone https://github.com/julienlag/quickTrackHub.git
+----
+
+* Make the script executable:
+
+[source,cmd]
+----
+chmod u+x $HOME/quickTrackHub/quickTrackHub.pl
+----
+
+* Download the `hubCheck` utility from UCSC (somewhat useful for Track Hub debugging purposes), and place it into `$HOME/bin/`
+
+[source,cmd]
+----
+mkdir -p $HOME/bin/
+----
+
+[source,cmd]
+----
+wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/hubCheck -O $HOME/bin/hubCheck
+----
+
+
+* Make it executable
+
+[source,cmd]
+----
+chmod u+x $HOME/bin/hubCheck
+----
+
+
+* `cd` to public Track Hub directory
+
+[source,cmd]
+----
+cd $trackHubDir
+----
+
+* Copy the template Track Hub Definition JSON file to your public Track Hub directory
+
+[source,cmd]
+----
+cp $HOME/quickTrackHub/trackHubDefinition.json .
+----
+
+
+* Open and edit the JSON file:
++
+[source,cmd]
+----
+gedit trackHubDefinition.json &
+----
++
+
+** Find and replace all instances of `ngsXX` in the file with your username.
+
+** Replace `your.email@yourinstitution.org` with your email address (Optional).
+
+** Save
+
+* Generate the list of files (BAMS + bigWigs) to include in the Track Hub:
+
+[source,cmd]
+----
+find . -type f | grep "\.bam\|\.bw" > dataFiles.list
+----
+
+* Make the Track Hub:
++
+[source,cmd]
+----
+quickTrackHub.pl trackHubDefinition.json`
+----
++
+
+* Load the Track Hub in the UCSC Browser
++
+Your hub's URL is output by the following command:
++
+[source,cmd]
+----
+echo http://public-docs.crg.es/NGS/$USER/track_hub/hub.txt
+----
++
+
+There are two ways to load your Track Hub:
+
+** Load manually:
+
+*** Click on the "track hub" button below the genome image in the UCSC Browser
+
+*** Select the "My Hubs" tab
+*** In the "URL" box, paste the URL of your hub (`\http://public-docs.crg.es/NGS/$USER/track_hub/hub.txt`)
+*** Click on "Add Hub"
+*** You should be redirected to the mm9 Browser Gateway
+
+** Load directly through URL:
+Get the direct link via:
+
++
+[source,cmd]
+----
+echo "http://genome.ucsc.edu/cgi-bin/hgTracks?db=mm9&hubUrl=http://public-docs.crg.es/NGS/$USER/track_hub/hub.txt"
+----
+
+And copy/paste the output in your browser.
