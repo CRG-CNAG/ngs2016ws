@@ -17,7 +17,7 @@ all: html pdf
 
 html: $(HTML_FILE) $(CHEATSHEET_HTML)
 $(HTML_FILE): setup $(README)
-	@GEM_HOME=$(GEMS) $(GEMS)/bin/asciidoctor $(README) -o $(HTML_FILE)
+	@GEM_HOME=$(GEMS) $(GEMS)/bin/asciidoctor $(README) -a allow-uri-read -o $(HTML_FILE)
 	@echo == Written file $(HTML_FILE)
 
 $(CHEATSHEET_HTML): setup $(CHEATSHEET)
@@ -47,7 +47,7 @@ $(DEPLOY_LIST):
 	@echo $(CHEATSHEET_HTML) >> $(DEPLOY_LIST)
 	@echo $(LOGO_JPG) >> $(DEPLOY_LIST)
 	@echo $(LOGO_PNG) >> $(DEPLOY_LIST)
-	@echo css >> $(DEPLOY_LIST)
+	@echo css/crg.css >> $(DEPLOY_LIST)
 
 check_deploy:
 ifndef RNASEQ_DEPLOY_DIR
