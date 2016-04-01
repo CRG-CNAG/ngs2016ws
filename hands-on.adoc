@@ -40,6 +40,8 @@ include::file-formats.adoc[]
 
 include::gene-annotation.adoc[]
 
+include::nextflow.adoc[]
+
 include::https://raw.githubusercontent.com/guigolab/grape-nf/asciidoctor/docs/src/quickstart.adoc[]
 
 include::rna-seq-processing.adoc[]
