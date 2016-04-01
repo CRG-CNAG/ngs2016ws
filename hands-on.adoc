@@ -1,4 +1,4 @@
-= CRG RNAseq Data Analysis Hands-on
+= NGS 2016 Workshop Hands-on
 :hide-uri-scheme:
 :nofooter:
 :icons: font
