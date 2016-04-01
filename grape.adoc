@@ -1,0 +1,54 @@
+= GRAPE
+:user: ngs00
+
+Pull the pipeline:
+
+[source,cmd]
+----
+nextflow pull guigolab/grape-nf
+----
+
+----
+Checking guigolab/grape-nf ...
+ downloaded from https://github.com/guigolab/grape-nf.git
+----
+
+The pipeline has been cloned from the github repository and saved in:
+
+[source]
+----
+~/.nextflow/assets/guigolab/grape-nf/
+----
+
+Create a folder named `grape` in your home folder and move to it:
+
+[source,cmd]
+----
+mkdir grape && cd grape
+----
+
+Create a `nextflow.config` file in the current directory with the following content:
+
+[subs='attributes']
+[source,java]
+----
+params.index = '/users/{user}/data/index.tsv'
+params.genome = '/users/{user}/refs/mouse_genome_mm9.fa'
+params.annotation = '/users/{user}/refs/mm65.long.ok.gtf'
+params.genomeIndex = '/users/{user}/refs/mouse_genome_mm9_STAR_index'
+
+trace.enabled = true
+timeline.enabled = true
+
+process {
+	executor = 'sge'
+	queue    = 'NGS'
+	penv = 'smp'
+}
+----
+
+
+[source,cmd]
+----
+nextflow -bg run grape-nf --steps mapping,bigwig --index /users/ngs01/data/index.tsv --genome /users/ngs01/refs/mouse_genome_mm9.fa --annotation /users/ngs01/refs/mm65.long.ok.gtf -resume > pipeline.log
+----
