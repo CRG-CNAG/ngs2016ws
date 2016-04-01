@@ -74,14 +74,29 @@ NH:i:1  HI:i:1  AS:i:200  NM:i:0  MD:Z:101 <12>
 <11> quality
 <12> optional fields
 
-= BAM
+== BAM
 
 BAM is a BGZF compressed version of the SAM format. BGZF is block compression implemented on top of the standard gzip
 file format. The goal of BGZF is to provide good compression while allowing efficient random access to the BAM file for
 indexed queries. The BGZF format is ‘gunzip compatible’, in the sense that a compliant gunzip utility can decompress a BGZF
 compressed file.
 
-= CRAM
+=== Random access
+
+BGZF files support random access through the BAM file index. Indexing aims to achieve fast retrieval of alignments overlapping a specified region without going through the whole alignments. BAM must be sorted by the [red]#reference ID and then the leftmost coordinate# before. The standard format for indexing BAM files is the [crg]#BAI# format.
+
+The BAI format is based on an underlying binning scheme. Each bin represents a contiguous genomic region which is either fully contained in or non-overlapping with another bin; each alignment is associated with a bin which represents the smallest
+region containing the entire alignment. To find the alignments that overlap a specified region, we need to get the bins that overlap the region, and then test each alignment in the bins to check overlap.
+
+Many programs need an accompanying BAI index for every input BAM. They usually assume the index is located next to the input file in the filesystem and has the same name as the input file, with the `.bai` extension appended. E.g.:
+
+[source, bash]
+----
+mouse_cns_E18_rep1_m4_n10_toGenome.bam
+mouse_cns_E18_rep1_m4_n10_toGenome.bam.bai
+----
+
+== CRAM
 
 CRAM is a framework technology with highly efficient and tunable reference-based compression of sequence data  and a data format
 that is directly available for computational use. It supports different compression formats (gzip, bzip2, CRAM records). CRAM records
