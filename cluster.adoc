@@ -1,20 +1,21 @@
 = Basic cluster usage
 :linux-crg-es: http://www.linux.crg.es
-:user: ngsN
-:login-node: ngs-login
 
 // tag::access[]
+:user: ngsXX
+:login-node: ngs-login
 == Access the CRG cluster
 
 To connect to the cluster login node type:
 
-[subs="attributes"]
-[source,bash]
+[source,bash,subs="+attributes"]
 ----
 ssh -Y {user}@{login-node}.linux.crg.es
 ----
 
-the `-Y` option allows graphical output (**X11** forwarding).
+Replace `{user}` with your username.
+
+The `-Y` option allows graphical output (**X11** forwarding).
 // end::access[]
 
 == Basic commands
