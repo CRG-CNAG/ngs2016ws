@@ -185,6 +185,18 @@ Have a look at the generated db file:
 less -S ~/grape/pipeline.db
 ----
 
+For this run, the 5th field of the db file can have one of the following values:
+
+[cols="l,1",options="autowidth"]
+|===
+| GenomeAlignments        | genomic mapping file (references are chromosomes, e.g. `Chr1`)
+| TranscriptomeAlignments | transcriptomic mapping file (references are transcripts, e.g. `ENSMUST00000160944`)
+| PlusRawSignal           | RNA-seq signal for the plus strand from uniquely mapped reads
+| MinusRawSignal          | RNA-seq signal for the minus strand from uniquely mapped reads
+| MultiplePlusRawSignal   | RNA-seq signal for the plus strand from all mapped reads
+| MultipleMinusRawSignal  | RNA-seq signal for the minus strand from all mapped reads
+|===
+
 === Mapping
 
 When the mapping steps are done, we can have a look at the mapping files. We can get the genomic `BAM` file for the experiment `mouse_cns_E18_rep1`
