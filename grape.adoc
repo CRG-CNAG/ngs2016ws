@@ -1,7 +1,12 @@
 = GRAPE
 :user: ngs00
+:grape-github: https://github.com/guigolab/grape-nf
 
-Pull the pipeline:
+This section of the workshop is a step by step tutorial on how to run the Grape pipeline on the workshop sample data.
+
+== Get the pipeline
+
+The pipeline codebase is on {grape-github}[Github^]. The Grape repository is configured to fullfil Nextflow requirements for pipeline sharing. In order to get the latest version of the pipeline run the following command:
 
 [source,cmd]
 ----
@@ -15,42 +20,147 @@ Checking guigolab/grape-nf ...
 
 The pipeline has been cloned from the github repository and saved in:
 
-[source]
+[listing,subs="attributes"]
 ----
 ~/.nextflow/assets/guigolab/grape-nf/
 ----
 
-Create a folder named `grape` in your home folder and move to it:
+You can see the help message of the pipeline by running:
+
+[source,cmd]
+----
+nextflow run grape-nf --help
+----
+
+----
+N E X T F L O W  ~  version 0.17.3
+Launching 'guigolab/grape-nf' - revision: 0435bcf303 [master]
+
+G R A P E ~ RNA-seq Pipeline
+----------------------------
+Run the GRAPE RNA-seq pipeline on a set of data.
+
+Usage:
+    grape-pipeline.nf --index INDEX_FILE --genome GENOME_FILE --annotation ANNOTATION_FILE [OPTION]...
+
+Options:
+    --help                              Show this message and exit.
+    --index INDEX_FILE                  Index file.
+    --genome GENOME_FILE                Reference genome file(s).
+    --annotation ANNOTAION_FILE         Reference gene annotation file(s).
+    --steps STEP[,STEP]...              The steps to be executed within the pipeline run. Possible values: "mapping", "bigwig", "contig", "quantification". Default: all
+    --max-mismatches THRESHOLD          Set maps with more than THRESHOLD error events to unmapped. Default "4".
+    --max-multimaps THRESHOLD           Set multi-maps with more than THRESHOLD mappings to unmapped. Default "10".
+    --bam-sort METHOD                   Specify the method used for sorting the genome BAM file.
+    --add-xs                            Add the XS field required by Cufflinks/Stringtie to the genome BAM file.
+
+SAM read group options:
+    --rg-platform PLATFORM              Platform/technology used to produce the reads for the BAM @RG tag.
+    --rg-library LIBRARY                Sequencing library name for the BAM @RG tag.
+    --rg-center-name CENTER_NAME        Name of sequencing center that produced the reads for the BAM @RG tag.
+    --rg-desc DESCRIPTION               Description for the BAM @RG tag.
+----
+
+NOTE: since the pipeline has beed already pulled to the local system we can omit the repository owner name (`guigolab`) when running the pipeline.
+
+== Setup
+
+We need to create a working directory for the pipeline run. Create a folder named `grape` in your home folder and go inside the folder:
 
 [source,cmd]
 ----
 mkdir grape && cd grape
 ----
 
+=== Input data
+
+The pipeline needs a tab separated file as an input. This file should contain information about the FASTQ files to be processed. The
+columns needed in order are:
+
+[cols="1,l,1",options="autowidth"]
+|===
+| [red]#{counter:index-qs}# | sample | the sample identifier, used to merge bam files in case multiple runs for the same sample are present
+| [red]#{counter:index-qs}# | id     | the run identifier (e.g. labExpId)
+| [red]#{counter:index-qs}# | path   | the path to the fastq file
+| [red]#{counter:index-qs}# | type   | the type (e.g. fastq)
+| [red]#{counter:index-qs}# | view   | an attribute that specifies the content of the file (e.g. FastqRd1)
+|===
+
+Here is an example:
+
+----
+mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_1.fastq.gz	fastq	FqRd1
+mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_2.fastq.gz	fastq	FqRd2
+----
+
+You can have have a look at the index file we are going to use in the workshop:
+
+[source,cmd,subs='attributes']
+----
+cat /users/{user}/data/index.tsv
+----
+
+=== Pipeline configuration
+
 Create a `nextflow.config` file in the current directory with the following content:
 
-[subs='attributes']
-[source,java]
+[source,java,subs='attributes,verbatim']
 ----
-params.index = '/users/{user}/data/index.tsv'
-params.genome = '/users/{user}/refs/mouse_genome_mm9.fa'
-params.annotation = '/users/{user}/refs/mm65.long.ok.gtf'
-params.genomeIndex = '/users/{user}/refs/mouse_genome_mm9_STAR_index'
+params { // <1>
+	index = '/users/{user}/data/index.tsv'
+	genome = '/users/{user}/refs/mouse_genome_mm9.fa'
+	annotation = '/users/{user}/refs/mm65.long.ok.gtf'
+	genomeIndex = '/users/{user}/refs/mouse_genome_mm9_STAR_index'
+  steps = 'mapping,bigwig'
+}
 
-trace.enabled = true
-timeline.enabled = true
+trace.enabled = true // <2>
+timeline.enabled = true // <3>
 
-process {
+process { // <4>
 	executor = 'sge'
 	queue    = 'NGS'
 	penv = 'smp'
 }
 
-includeConfig "/users/{userq}/ngs.config"
+includeConfig "/users/{user}/ngs.config" // <5>
+----
+<1> Parameter definitions. It could also be done from the command line (e.g. `--genome /users/{user}/refs/mouse_genome_mm9.fa`).
+<2> Enable process execution tracing
+<3> Enable HTML timeline generation
+<4> Process options for running in the workshop HPC cluster
+<5> Include an external configuration file
+
+== Run
+
+Grape uses Nextflow profiles to define the set of tools to be used for the pipeline run. To date three main profiles are available:
+
+[cols="l,1", options="autowidth"]
+|===
+| gemflux  | GEM for mapping, custom scripts for RNAseq Signal and Contig and FluxCapacitor for genes and transcripts expression quantification
+| starrsem | STAR for mapping and RNAseq Signal, custom script for Contig and RSEM for gene and transcripts expression quantification
+| starflux | STAR for mapping and RNAseq Signal, custom script for Contig and FluxCapacitor for gene and transcripts expression
+						 quantification
+|===
+plus
+
+There is also a `standard` profile used as the default, which is the same as `starrsem` plus an additional configuration option. We are going to use this profiles which looks like:
+
+[source,java]
+----
+include::https://raw.githubusercontent.com/guigolab/grape-nf/master/nextflow.config[lines=36..47]
 ----
 
+The `bamSort` options tells the pipeline to use `samtools` for sorting the mapping output file.
+
+In order to run the pipeline, use this command:
 
 [source,cmd]
 ----
-nextflow -bg run grape-nf --steps mapping,bigwig -resume > pipeline.log
+nextflow -bg run grape-nf > pipeline.log
 ----
+
+== Output data
+
+=== Mapping
+
