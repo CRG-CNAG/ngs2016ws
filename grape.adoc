@@ -68,14 +68,14 @@ cat /users/{user}/data/index.tsv
 
 Create a `nextflow.config` file in the current directory with the following content:
 
-[source,java,subs='attributes,verbatim']
+[source,subs='attributes,verbatim']
 ----
 params { // <1>
 	index = '/users/{user}/data/index.tsv'
 	genome = '/users/{user}/refs/mouse_genome_mm9.fa'
 	annotation = '/users/{user}/refs/mm65.long.ok.gtf'
 	genomeIndex = '/users/{user}/refs/mouse_genome_mm9_STAR_index'
-  steps = 'mapping,bigwig'
+	steps = 'mapping,bigwig'
 }
 
 trace.enabled = true // <2>
@@ -110,7 +110,7 @@ plus
 
 Profiles can be specified explicitly on the command line. There is also a `standard` profile used as the default when no profile is specified. For Grape, it is the same as `starrsem` plus an additional configuration option and we are going to use this profile. It looks like:
 
-[source,java]
+[source]
 ----
 include::https://raw.githubusercontent.com/guigolab/grape-nf/master/nextflow.config[lines=36..47]
 ----
