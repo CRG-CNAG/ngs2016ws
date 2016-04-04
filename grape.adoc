@@ -32,34 +32,8 @@ You can see the help message of the pipeline by running:
 nextflow run grape-nf --help
 ----
 
-----
-N E X T F L O W  ~  version 0.17.3
-Launching 'guigolab/grape-nf' - revision: 0435bcf303 [master]
-
-G R A P E ~ RNA-seq Pipeline
-----------------------------
-Run the GRAPE RNA-seq pipeline on a set of data.
-
-Usage:
-    grape-pipeline.nf --index INDEX_FILE --genome GENOME_FILE --annotation ANNOTATION_FILE [OPTION]...
-
-Options:
-    --help                              Show this message and exit.
-    --index INDEX_FILE                  Index file.
-    --genome GENOME_FILE                Reference genome file(s).
-    --annotation ANNOTAION_FILE         Reference gene annotation file(s).
-    --steps STEP[,STEP]...              The steps to be executed within the pipeline run. Possible values: "mapping", "bigwig", "contig", "quantification". Default: all
-    --max-mismatches THRESHOLD          Set maps with more than THRESHOLD error events to unmapped. Default "4".
-    --max-multimaps THRESHOLD           Set multi-maps with more than THRESHOLD mappings to unmapped. Default "10".
-    --bam-sort METHOD                   Specify the method used for sorting the genome BAM file.
-    --add-xs                            Add the XS field required by Cufflinks/Stringtie to the genome BAM file.
-
-SAM read group options:
-    --rg-platform PLATFORM              Platform/technology used to produce the reads for the BAM @RG tag.
-    --rg-library LIBRARY                Sequencing library name for the BAM @RG tag.
-    --rg-center-name CENTER_NAME        Name of sequencing center that produced the reads for the BAM @RG tag.
-    --rg-desc DESCRIPTION               Description for the BAM @RG tag.
-----
+[listing%nowrap]
+include::https://raw.githubusercontent.com/guigolab/grape-nf/master/docs/src/quickstart.adoc[lines=131..158]
 
 NOTE: since the pipeline has beed already pulled to the local system we can omit the repository owner name (`guigolab`) when running the pipeline.
 
@@ -74,17 +48,7 @@ mkdir grape && cd grape
 
 === Input data
 
-The pipeline needs a tab separated file as an input. This file should contain information about the FASTQ files to be processed. The
-columns needed in order are:
-
-[cols="1,l,1",options="autowidth"]
-|===
-| [red]#{counter:index-qs}# | sample | the sample identifier, used to merge bam files in case multiple runs for the same sample are present
-| [red]#{counter:index-qs}# | id     | the run identifier (e.g. labExpId)
-| [red]#{counter:index-qs}# | path   | the path to the fastq file
-| [red]#{counter:index-qs}# | type   | the type (e.g. fastq)
-| [red]#{counter:index-qs}# | view   | an attribute that specifies the content of the file (e.g. FastqRd1)
-|===
+include::https://raw.githubusercontent.com/guigolab/grape-nf/master/docs/src/quickstart.adoc[lines=162..173]
 
 Here is an example:
 
@@ -93,7 +57,7 @@ mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_1.fastq.gz	fastq	FqRd1
 mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_2.fastq.gz	fastq	FqRd2
 ----
 
-You can have have a look at the index file we are going to use in the workshop:
+You can have have a look at the index file for the workshop:
 
 [source,cmd,subs='attributes']
 ----
@@ -144,7 +108,7 @@ Grape uses Nextflow profiles to define the set of tools to be used for the pipel
 |===
 plus
 
-There is also a `standard` profile used as the default, which is the same as `starrsem` plus an additional configuration option. We are going to use this profiles which looks like:
+Profiles can be specified explicitly on the command line. There is also a `standard` profile used as the default when no profile is specified. For Grape, it is the same as `starrsem` plus an additional configuration option and we are going to use this profile. It looks like:
 
 [source,java]
 ----
@@ -160,7 +124,63 @@ In order to run the pipeline, use this command:
 nextflow -bg run grape-nf > pipeline.log
 ----
 
-== Output data
+=== Monitor the run
 
-=== Mapping
+The status of the pipeline run can be monitored by looking at the `pipeline.log` files we specified above.
 
+[source,cmd,subs="attributes"]
+----
+tail -f ~/grape/pipeline.log
+----
+[subs="specialchars,attributes,quotes,replacements,macros,post_replacements"]
+----
+...
+===============
+Output files db -> /nfs/users/ngs00/grape/pipeline.db
+===============
+
+[warm up] executor > sge
+[65/aa3f6e] Submitted process > fastaIndex (mouse_genome_mm9-SAMtools-0.1.19)
+[#46/1c2697#] Submitted process > mapping (mouse_cns_E18_rep1-STAR-2.4.0j)
+[3b/7b0ffc] Submitted process > mapping (mouse_cns_E14_rep1-STAR-2.4.0j)
+[0a/344ded] Submitted process > mapping (mouse_cns_E14_rep2-STAR-2.4.0j)
+[5f/b56606] Submitted process > mapping (mouse_cns_E18_rep2-STAR-2.4.0j)
+icon:circle-o-notch[pulse]
+----
+
+The highlighted string specifies the prefix of the process working folder. It is relative to the pipeline working folder which, by default, is `work` inside the current folder. To get the full name of the folder you need to use bash `autocompletion` feature. Type the path to the folder, include the prefix and press kbd:[TAB]. For the previous example process:
+
+[subs="specialchars,attributes,quotes,replacements,macros,post_replacements"]
+----
+ls /nfs/users/ngs00/grape/work/46/1c2697kbd:[TAB]77223fec512d031da42ff956/
+----
+
+If the run finishes wihtout errors the pipeline log file ends with a success message:
+
+----
+...
+
+-----------------------
+Pipeline run completed.
+-----------------------
+----
+
+== Results
+
+The path and metadata of output files generated by the pipeline run are written inside a `TAB` separated file, named `pipeline.db`. The file can be found inside the pipeline working folder.
+
+The first 5 columns follow the same schema as the input index file. Here is a description of the remaining columns:
+
+[cols="1,l,1",options="autowidth"]
+|===
+| [red]#{counter:index-qs}# | read configuration | the configuration of the reads (e.g. `Paired-End`)
+| [red]#{counter:index-qs}# | strandness         | the strandness of the experiments, automaticalliy inferred from the
+																								   mapping files (e.g. `MATE2_SENSE`)
+|===
+
+Have a look at the generated db file:
+
+[source,cmd]
+----
+less -S ~/grape/pipeline.db
+----
