@@ -1,5 +1,4 @@
 = BigWig
-:source-language: bash
 :bigwig: https://genome.ucsc.edu/goldenpath/help/bigWig.html
 :bedgraph: https://genome.ucsc.edu/goldenpath/help/bedgraph.html
 :wiggle: https://genome.ucsc.edu/goldenpath/help/wiggle.html
