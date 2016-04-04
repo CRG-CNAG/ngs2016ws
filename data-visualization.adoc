@@ -57,6 +57,11 @@ or by *right-clicking* the corresponding area on the image:
 
 image:AC114783.6.png[UCSC-drop-down2,350,350, align="center"]
 
+Some track types (bigWigs, BAMs) have much more detailed configuration options:
+
+image:AC114783.8.png[bigWig-config,600,350, align="center"]
+
+
 
 == Visualizing your own data
 
@@ -95,27 +100,63 @@ mkdir -p $customTrackDir
 [source,cmd]
 ----
 awk '$5~/GenomeAlignment|^PlusRawSignal|^MinusRawSignal/{print $3}' $grapeDb | while read f; do
-	# copy data files:
-	rsync -av $f $customTrackDir
-	# copy BAM indices as well:
-	[[ "$f" =~ bam$ ]] && rsync -av $f.bai $customTrackDir/$f.bai
+# copy data files:
+rsync -av $f $customTrackDir/
+# copy BAM indices as well:
+[[ "$f" =~ bam$ ]] && rsync -av $f.bai $customTrackDir/$f.bai
 done
 ----
+
+Can you see the files in your Web Browser?
+
+* Open the http://genome.ucsc.edu/cgi-bin/hgGateway[Genome Browser^]
+
+* Make sure you're using the correct genome assembly (mouse/mm9)
+
+* Click on "add custom tracks"
+
+* Go back to you terminal and convert local datafile paths to global web URLs:
++
+[source,cmd]
+----
+cd $customTrackDir
+for file in `ls . |grep -v .bai`; do
+echo "http://public-docs.crg.es/NGS/$USER/custom_tracks/$file"
+done
+----
++
+Copy the output
+
+* Switch to your Web Browser, paste the URLs into the "Paste URLs or data:" text box and clisk "Submit". Your data will then be uploaded to UCSC servers.
+
+* Check out our two gene examples:
+
+[cols="3*", options="header"]
+|===
+|ENSEMBL id
+|Genome position (mm9)
+|Differential expression
+
+|`ENSMUSG00000052187`
+|`chr7:111,000,259-111,001,754`
+|E14 > E18
+
+|`ENSMUSG00000032936`
+|`chr9:107,838,251-107,852,022`
+|E14 < E18
+|===
 
 WARNING: Custom tracks are viewable only on the machine from which they were uploaded and are automatically discarded *48 hours* after the last time they are accessed, unless they are saved in a http://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#CTs[Session^] (in which case UCSC will erase them after *4 months*). For a permanent solution, use <<Track Hubs>> instead.
 
 
 === Track Hubs
 
-http://genome.cse.ucsc.edu/goldenPath/help/hgTrackHubHelp.html[Track Hubs^] can be thought of as a *_permanent_*, more *_customizable_* version of Custom Tracks.  Other important differences include:
-
-* None of the Track Hub data is stored at UCSC. It *stays on your server*: the browser fetches (hence only indexed genomic data will work).
-* You can build "Assembly Hubs", _i.e._ Track Hubs on genome assemblies absent from UCSC.
+http://genome.cse.ucsc.edu/goldenPath/help/hgTrackHubHelp.html[Track Hubs^] are Custom Tracks on steroids:
 
 [options="header"]
 |=======================
 |     |Custom Tracks      | Track Hubs
-|*Display parameters accessible to users*    | Few    | LOTS
+|*Configure track in groups*  | No  | Yes
 |*Where is the data?*  | UCSC servers     | Your server
 |*How long will it live?*     |48h     | "Forever"
 |*On exotic genome assemblies?*    |No | Yes (http://genomewiki.ucsc.edu/index.php/Assembly_Hubs[Assembly hubs^])
@@ -151,14 +192,14 @@ NOTE: The Track Hub will be organized based on the metadata contained in the fil
 [source,cmd]
 ----
 for f in `find $customTrackDir/ -type f`; do
-	# perform some string substitution magic to rename the files
-	outFile=$(basename $f)
-	outFile=${outFile/mouse/mm9}
-	outFile=${outFile//.Unique./_Unique_}
-	# copy/rename data files:
-	rsync -av $f $trackHubDir/$outFile
-	# copy/rename BAM indices as well:
-	[[ "$f" =~ bam$ ]] && rsync -av $f.bai $trackHubDir/$outFile.bai
+# perform some string substitution magic to rename the files
+outFile=$(basename $f)
+outFile=${outFile/mouse/mm9}
+outFile=${outFile//.Unique./_Unique_}
+# copy/rename data files:
+rsync -av $f $trackHubDir/$outFile
+# copy/rename BAM indices as well:
+[[ "$f" =~ bam$ ]] && rsync -av $f.bai $trackHubDir/$outFile.bai
 done
 ----
 
@@ -239,7 +280,7 @@ find . -type f | grep "\.bam\|\.bw" > dataFiles.list
 +
 [source,cmd]
 ----
-quickTrackHub.pl trackHubDefinition.json`
+quickTrackHub.pl trackHubDefinition.json
 ----
 +
 
@@ -277,6 +318,11 @@ And copy/paste the output in your browser.
 +
 TIP: Use this direct link to share your Track Hub with collaborators.
 
+The settings of your Track Hub are accessible here (below the genome image):
+
+image:AC114783.9.png[trackHubsettings,650,650, align="center"]
+
+
 * Look at our two favorite differentially expressed genes:
 
 
@@ -295,5 +341,5 @@ TIP: Use this direct link to share your Track Hub with collaborators.
 |E14 < E18
 |===
 
-* Configure the track in order to visualize better the differential expression.
+* Configure the track so as to visualize better the differential expression.
 
