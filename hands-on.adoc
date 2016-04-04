@@ -41,6 +41,8 @@ include::gene-annotation.adoc[]
 
 include::file-formats.adoc[]
 
+include::nextflow.adoc[]
+
 include::grape.adoc[]
 
 include::rna-seq-processing.adoc[]
