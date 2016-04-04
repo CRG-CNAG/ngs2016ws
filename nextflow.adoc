@@ -49,7 +49,7 @@ Write a basic script to count the number of transcripts and exons in a gene anno
 ----
 #!/usr/bin/env nextflow
 echo true
-annotation = Channel.fromPath('rnaseq/refs/mm65.long.ok.gtf')
+annotation = Channel.fromPath('/users/ngs00/refs/mm65.long.ok.gtf')
 
 process count {
 
@@ -89,7 +89,7 @@ be provided on the launch command line as an extra option.
 echo true
 
 params.gene = 'Sec23a'
-params.annot = 'rnaseq/refs/mm65.long.ok.gtf'
+params.annot = '/users/ngs00/refs/mm65.long.ok.gtf'
 
 annotation = Channel.fromPath(params.annot)
 
@@ -120,7 +120,7 @@ Try to execute it providing a different gene name of annotation file. For exampl
 ----
 nextflow run tutorial2.nf --gene Sec1
 :
-nextflow run tutorial2.nf --annot <TODO>
+nextflow run tutorial2.nf --annot /users/ngs00/refs/gencode.vM7.annotation.gtf --gene Sec23b
 ----
 
 
@@ -135,7 +135,7 @@ are provided.
 echo true
 
 params.gene = 'Sec23a'
-params.annot = 'rnaseq/refs/mm65.long.ok.gtf'
+params.annot = '/users/ngs00/refs/mm65.long.ok.gtf'
 
 annotation = Channel.fromPath(params.annot)
 genes = params.gene.tokenize(', ')
@@ -158,9 +158,12 @@ process count {
 Save the above content to a file named `tutorial3.nf`, then run it proving more than an 
 annotation file as shown below: 
 
-[source,base]
+[source]
 ----
-nextflow run tutorial4.nf --annot '.. *'
+nextflow run tutorial3.nf --annot '/users/ngs00/refs/*.gtf' 
+:
+nextflow run tutorial3.nf --gene Sec23a,Tulp1,Trex1
+:
 ----
 
 Each of file matching the specified glob pattern will trigger the execution
@@ -177,7 +180,7 @@ into a file and
 #!/usr/bin/env nextflow
 
 params.gene = 'Sec23a'
-params.annot = 'rnaseq/refs/mm65.long.ok.gtf'
+params.annot = '/users/ngs00/refs/mm65.long.ok.gtf'
 
 annotation = Channel.fromPath(params.annot)
 genes = params.gene.tokenize(', ')
@@ -211,6 +214,30 @@ result
 <2> The `collectFile` operator gathers the produced lines and append them into a file.
 <3> The `println` operator prints the file content.   
 
+Save the above script to a file named `tutorial4.nf`, then run it by using the 
+following command in your shell terminal: 
+
+[source]
+----
+nextflow run tutorial4.nf --annot '/users/ngs00/refs/*.gtf' --gene Sec23a,Tulp1
+----
+
+It will print an output similar to the following: 
+
+[source]
+----
+gencode.vM9.annotation,Tulp1,12,71
+gencode.vM7.annotation,Sec23a,5,47
+mm65.long.ok,Sec23a,5,47
+gencode.v22.annotation,Sec23a,0,0
+gencode.v22.annotation,Tulp1,0,0
+gencode.vM7.annotation,Tulp1,12,71
+mm65.long.ok,Tulp1,12,71
+dmel-all-no-analysis-r6.05,Tulp1,0,0
+dmel-all-no-analysis-r6.05,Sec23a,0,0
+gencode.vM9.annotation,Sec23a,5,47
+----
+
 
 == Use a computing cluster 
 
@@ -226,7 +253,7 @@ pipeline configuration file:
 process {
     executor = 'sge'
     queue = 'NGS'
-    memory = '1 GB'
+    memory = '512 MB'
 }
 ----
 
@@ -235,7 +262,7 @@ the script execution as before:
 
 [source,bash]
 ----
-nextflow run tutorial4.nf -bg > log 
+nextflow run tutorial4.nf -bg --annot '/users/ngs00/refs/*.gtf' --gene Sec23a,Tulp1,Trex > log 
 ----
 
 You can check tasks are submitted to the cluster using the following command: 
@@ -253,3 +280,42 @@ The following platforms are currently supported:
 * IBM LSF
 * Torque/PBS 
 
+== Resume pipeline execution
+
+Launch the script execution as shown below: 
+
+[source,bash]
+----
+nextflow run tutorial4.nf --annot '/users/ngs00/refs/*.gtf' --gene Sec23a -resume
+----
+
+The `-resume` command line option will force to skip the execution of tasks that have 
+been already executed successfully. 
+
+It will print an output similar to the following:
+
+[source]
+---- 
+N E X T F L O W  ~  version 0.17.3
+Launching tutorial4.nf
+[warm up] executor > sge
+[85/145369] Cached process > count (2)
+[35/054b18] Cached process > count (1)
+[4a/36a5d1] Cached process > count (3)
+gencode.vM7.annotation,Sec23a,5,47
+mm65.long.ok,Sec23a,5,47
+----
+
+If you add other genes by using `-gene` option only the tasks required by the new input 
+will be executed. For example: 
+
+[source]
+----
+nextflow run tutorial4.nf --annot '/users/ngs00/refs/*.gtf' --gene Sec23a,Tulp2,Trex2 -resume
+---- 
+
+Only the tasks receiving `Tulp2` `and `Trex2` will be launched. 
+
+
+
+ 
