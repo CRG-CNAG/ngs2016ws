@@ -11,14 +11,12 @@ The attribute list must begin with the two mandatory attributes:
 | transcript_id | A globally unique identifier for the predicted transcript.
 |===
 
-.Ninth field in a GTF data line
-[source,attributes]
+.Nineth field in a GTF data line
 ----
 gene_id "Em:U62317.C22.6.mRNA"; transcript_id "Em:U62317.C22.6.mRNA"; exon_number 1
 ----
 
 .A whole GTF data line
-[source,gtf]
 ----
 chr12 <1>
 ENSEMBL <2>
@@ -46,15 +44,15 @@ gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000021375"; exon_number "2
 The third field in the GFF specification represents feature type for the line. In addition to the standard features mentioned above there can be `intron`, `gene` and `transcript`.
 
 .Other types of feature
-[source,intron]
+[subs="+quotes"]
 ----
-chr12   ENSEMBL intron  60079551        60083554        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "1"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
+chr12   ENSEMBL #intron#  60079551        60083554        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "1"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
 ----
-[source,gene]
+[subs="+quotes"]
 ----
-chr12   ENSEMBL gene    60059370        60113004        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUSG00000020986"; gene_type "protein_coding"; gene_status "NULL"; gene_name "Sec23a"; transcript_type "protein_coding"; transcript_status "NULL"; transcript_name "Sec23a";
+chr12   ENSEMBL #gene#    60059370        60113004        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUSG00000020986"; gene_type "protein_coding"; gene_status "NULL"; gene_name "Sec23a"; transcript_type "protein_coding"; transcript_status "NULL"; transcript_name "Sec23a";
 ----
-[source,transcript]
+[subs="+quotes"]
 ----
-chr12   ENSEMBL transcript      60073977        60083691        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "4"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
+chr12   ENSEMBL #transcript#      60073977        60083691        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "4"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
 ----

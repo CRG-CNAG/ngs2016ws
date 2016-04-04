@@ -3,6 +3,8 @@
 
 :leveloffset: +1
 
+include::fasta-format.adoc[]
+
 include::fastq-format.adoc[]
 
 include::sam-format.adoc[]

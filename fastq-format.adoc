@@ -5,7 +5,6 @@
 FASTQ is a text-based format for storing biological sequences and their corresponding quality scores.
 
 .A paired FASTQ record
-[source,fastq]
 ----
 # first mate
 @HWI-ST985:73:C08BWACXX:6:1101:2221:174443 1:N:0: <1>

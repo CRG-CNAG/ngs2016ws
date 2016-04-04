@@ -13,7 +13,6 @@ The `bedGraph` format is line-oriented. `BedGraph` data could be preceeded by a 
 
 Following the track definition line are the track data in four column BED format.
 
-[source]
 ----
 chromA  chromStartA  chromEndA  dataValueA
 chromB  chromStartB  chromEndB  dataValueB
@@ -32,7 +31,6 @@ For speed and efficiency, `wiggle` data is compressed and stored internally in 1
 
 - `variableStep` is for data with irregular intervals between new data points and is the more commonly used `wiggle` format. The `variableStep` section begins with a declaration line and is followed by two columns containing chromosome positions and data values:
 
-[source]
 ----
 variableStep  chrom=chrN  [span=windowSize]
 chromStartA  dataValueA
@@ -41,7 +39,6 @@ chromStartB  dataValueB
 
 - `fixedStep` is for data with regular intervals between new data values and is the more compact `wiggle` format. The `fixedStep` section begins with a declaration line and is followed by a single column of data values:
 
-[source]
 ----
 fixedStep  chrom=chrN  start=position  step=stepInterval  [span=windowSize]
 dataValue1
