@@ -5,8 +5,8 @@ HTML_FILE = index.html
 PDF_FILE = hands-on.pdf
 CHEATSHEET_HTML = cheatsheet.html
 CHEATSHEET_PDF = cheatsheet.pdf
-LOGO_JPG = assets/crg_blue_logo.jpg
-LOGO_PNG = assets/crg_blue_logo.png
+STYLESHEETS_DIR = css
+ASSETS_DIR = assets
 README = hands-on.adoc
 CHEATSHEET = cheatsheet.adoc
 DEPLOY_LIST = deploy-list.txt
@@ -45,9 +45,8 @@ $(GEMS)/bin/bundle:
 $(DEPLOY_LIST):
 	@echo $(HTML_FILE) >> $(DEPLOY_LIST)
 	@echo $(CHEATSHEET_HTML) >> $(DEPLOY_LIST)
-	@echo $(LOGO_JPG) >> $(DEPLOY_LIST)
-	@echo $(LOGO_PNG) >> $(DEPLOY_LIST)
-	@echo css/crg.css >> $(DEPLOY_LIST)
+	@echo $(ASSETS_DIR) >> $(DEPLOY_LIST)
+	@echo $(STYLESHEETS_DIR) >> $(DEPLOY_LIST)
 
 check_deploy:
 ifndef RNASEQ_DEPLOY_DIR
@@ -55,7 +54,7 @@ ifndef RNASEQ_DEPLOY_DIR
 endif
 
 deploy: html $(DEPLOY_LIST) check_deploy
-	rsync -a --files-from=$(DEPLOY_LIST) . $(RNASEQ_DEPLOY_DIR)
+	rsync -ar --files-from=$(DEPLOY_LIST) . $(RNASEQ_DEPLOY_DIR)
 
 clean:
 	rm -f $(HTML_FILE) $(CHEATSHEET_HTML) $(PDF_FILE) $(CHEATSHEET_PDF) $(DEPLOY_LIST)
