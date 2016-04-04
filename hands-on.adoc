@@ -45,10 +45,6 @@ include::nextflow.adoc[]
 
 include::grape.adoc[]
 
-include::rna-seq-processing.adoc[]
-
-include::rna-seq-analyses.adoc[]
-
 include::data-visualization.adoc[]
 
 ifeval::["{backend}" == "pdf"]
