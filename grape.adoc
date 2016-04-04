@@ -189,7 +189,7 @@ For this run, the 5th field of the db file can have one of the following values:
 
 [cols="l,1",options="autowidth"]
 |===
-| GenomeAlignments        | genomic mapping file (references are chromosomes, e.g. `Chr1`)
+| GenomeAlignments        | genomic mapping file (references are chromosomes, e.g. `chr1`)
 | TranscriptomeAlignments | transcriptomic mapping file (references are transcripts, e.g. `ENSMUST00000160944`)
 | PlusRawSignal           | RNA-seq signal for the plus strand from uniquely mapped reads
 | MinusRawSignal          | RNA-seq signal for the minus strand from uniquely mapped reads
