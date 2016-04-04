@@ -140,11 +140,11 @@ Output files db -> /nfs/users/ngs00/grape/pipeline.db
 ===============
 
 [warm up] executor > sge
-[65/aa3f6e] Submitted process > fastaIndex (mouse_genome_mm9-SAMtools-0.1.19)
-[#46/1c2697#] Submitted process > mapping (mouse_cns_E18_rep1-STAR-2.4.0j)
-[3b/7b0ffc] Submitted process > mapping (mouse_cns_E14_rep1-STAR-2.4.0j)
-[0a/344ded] Submitted process > mapping (mouse_cns_E14_rep2-STAR-2.4.0j)
-[5f/b56606] Submitted process > mapping (mouse_cns_E18_rep2-STAR-2.4.0j)
+[0a/d995a5] Submitted process > fastaIndex (mouse_genome_mm9-SAMtools-0.1.19)
+[#0c/bdee61#] Submitted process > mapping (mouse_cns_E18_rep1-STAR-2.4.0j)
+[e4/ad3136] Submitted process > mapping (mouse_cns_E18_rep2-STAR-2.4.0j)
+[10/0dda21] Submitted process > mapping (mouse_cns_E14_rep1-STAR-2.4.0j)
+[35/a3b3ce] Submitted process > mapping (mouse_cns_E14_rep2-STAR-2.4.0j)
 icon:circle-o-notch[pulse]
 ----
 
@@ -152,7 +152,7 @@ The highlighted string specifies the prefix of the process working folder. It is
 
 [subs="specialchars,attributes,quotes,replacements,macros,post_replacements"]
 ----
-ls /nfs/users/ngs00/grape/work/46/1c2697kbd:[TAB]77223fec512d031da42ff956/
+ls /nfs/users/ngs00/grape/work/0c/bdee61kbd:[TAB]0ed75e20bc6b47339257eeb9//
 ----
 
 If the run finishes wihtout errors the pipeline log file ends with a success message:
@@ -183,4 +183,60 @@ Have a look at the generated db file:
 [source,cmd]
 ----
 less -S ~/grape/pipeline.db
+----
+
+=== Mapping
+
+When the mapping steps are done, we can have a look at the mapping files. We can get the genomic `BAM` file for the experiment `mouse_cns_E18_rep1`
+
+[source,cmd]
+----
+BAM=$(awk '$1=="mouse_cns_E18_rep1" && $5=="GenomeAlignments"{print $3}' ~/grape/pipeline.db)
+----
+
+We can explore the contents of the mapping file:
+
+[source,cmd]
+----
+samtools view -h $BAM | less
+----
+
+or get the mapping statistics collected by STAR:
+
+[source,cmd]
+----
+cat $(dirname $BAM)/Log.final.out
+----
+----
+                                 Started job on |	Apr 04 12:28:45
+                             Started mapping on |	Apr 04 12:31:08
+                                    Finished on |	Apr 04 12:31:43
+       Mapping speed, Million of reads per hour |	77.15
+
+                          Number of input reads |	750067
+                      Average input read length |	202
+                                    UNIQUE READS:
+                   Uniquely mapped reads number |	645130
+                        Uniquely mapped reads % |	86.01%
+                          Average mapped length |	200.58
+                       Number of splices: Total |	346827
+            Number of splices: Annotated (sjdb) |	341765
+                       Number of splices: GT/AG |	343268
+                       Number of splices: GC/AG |	2924
+                       Number of splices: AT/AC |	404
+               Number of splices: Non-canonical |	231
+                      Mismatch rate per base, % |	0.19%
+                         Deletion rate per base |	0.01%
+                        Deletion average length |	1.92
+                        Insertion rate per base |	0.01%
+                       Insertion average length |	1.45
+                             MULTI-MAPPING READS:
+        Number of reads mapped to multiple loci |	27454
+             % of reads mapped to multiple loci |	3.66%
+        Number of reads mapped to too many loci |	847
+             % of reads mapped to too many loci |	0.11%
+                                  UNMAPPED READS:
+       % of reads unmapped: too many mismatches |	0.00%
+                 % of reads unmapped: too short |	10.06%
+                     % of reads unmapped: other |	0.15%
 ----
