@@ -65,7 +65,7 @@ image:AC114783.8.png[bigWig-config,600,350, align="center"]
 
 == Visualizing your own data
 
-* Set custom shell environment:
+* If not done already, set custom shell environment:
 
 [source,cmd]
 ----
@@ -103,7 +103,7 @@ awk '$5~/GenomeAlignment|^PlusRawSignal|^MinusRawSignal/{print $3}' $grapeDb | w
 # copy data files:
 rsync -av $f $customTrackDir/
 # copy BAM indices as well:
-[[ "$f" =~ bam$ ]] && rsync -av $f.bai $customTrackDir/$f.bai
+[[ "$f" =~ bam$ ]] && rsync -av $f.bai $customTrackDir/
 done
 ----
 
@@ -273,7 +273,7 @@ gedit trackHubDefinition.json &
 
 [source,cmd]
 ----
-find . -type f | grep "\.bam\|\.bw" > dataFiles.list
+find . -type f | grep "\.bam\|\.bw" | grep -v "\.bai" > dataFiles.list
 ----
 
 * Make the Track Hub:
