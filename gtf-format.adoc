@@ -11,22 +11,31 @@ The attribute list must begin with the two mandatory attributes:
 | transcript_id | A globally unique identifier for the predicted transcript.
 |===
 
-.Nineth field in a GTF data line
+Check the nineth GTF field of the sample annotation of the workshop:
+
+[source,cmd]
 ----
-gene_id "Em:U62317.C22.6.mRNA"; transcript_id "Em:U62317.C22.6.mRNA"; exon_number 1
+cut -f9 ~ngs00/refs/mm65.long.ok.gtf | head -1
+----
+----
+gene_id "ENSMUSG00000076490"; transcript_id "ENSMUST00000103291"; exon_number "1"; gene_name "Trbc1"; gene_type "IG_C_gene"; transcript_name "Trbc1-201"; protein_id "ENSMUSP00000100099"; transcript_type "IG_C_gene";
 ----
 
-.A whole GTF data line
+Look at the first line:
+[]
 ----
-chr12 <1>
+head -1 ~ngs00/refs/mm65.long.ok.gtf | tr '\t' '\n'
+----
+----
+chr6 <1>
 ENSEMBL <2>
-exon <3>
-60059370 <4>
-60061073 <5>
+CDS <3>
+41488217 <4>
+41488591 <5>
 . <6>
-- <7>
-. <8>
-gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000021375"; exon_number "20"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-001"; transcript_type "protein_coding"; <9>
++ <7>
+2 <8>
+gene_id "ENSMUSG00000076490"; transcript_id "ENSMUST00000103291"; exon_number "1"; gene_name "Trbc1"; gene_type "IG_C_gene"; transcript_name "Trbc1-201"; protein_id "ENSMUSP00000100099"; transcript_type "IG_C_gene"; <9>
 ----
 <1> `seqname` - The name of the sequence. Must be a chromosome or scaffold.
 <2> `source`  - The program that generated this feature.
@@ -38,21 +47,30 @@ gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000021375"; exon_number "2
 <8> `frame`   - If the feature is a coding exon, frame should be a number between 0-2 that represents the reading frame of the first base. If the feature is not a coding exon, the value should be `.`.
 <9> `group`   - All lines with the same group are linked together into a single item. Note the `gene_id` and `transcript_id` mandatory attributes.
 
-
 == Feature types
 
 The third field in the GFF specification represents feature type for the line. In addition to the standard features mentioned above there can be `intron`, `gene` and `transcript`.
 
-.Other types of feature
-[subs="+quotes"]
+Look for the first of each feature in the sample annotation of the workshop:
+
+[source,cmd,subs="+quotes"]
 ----
-chr12   ENSEMBL #intron#  60079551        60083554        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "1"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
+awk '$3=="intron"' ~ngs00/refs/mm65.long.ok.gtf | head -1
 ----
-[subs="+quotes"]
 ----
-chr12   ENSEMBL #gene#    60059370        60113004        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUSG00000020986"; gene_type "protein_coding"; gene_status "NULL"; gene_name "Sec23a"; transcript_type "protein_coding"; transcript_status "NULL"; transcript_name "Sec23a";
+chr17	ENSEMBL	#intron#	46893352	46893968	.	-	.	gene_id "ENSMUSG00000036858"; transcript_id "ENSMUST00000041012"; exon_number "3"; gene_name "Ptcra"; gene_type "IG_C_gene"; transcript_name "Ptcra-201"; transcript_type "IG_C_gene";
 ----
-[subs="+quotes"]
+[source,cmd,subs="+quotes"]
 ----
-chr12   ENSEMBL #transcript#      60073977        60083691        .       -       .       gene_id "ENSMUSG00000020986"; transcript_id "ENSMUST00000169976"; exon_number "4"; gene_name "Sec23a"; gene_type "protein_coding"; transcript_name "Sec23a-005"; transcript_type "retained_intron";
+awk '$3=="gene"' ~ngs00/refs/mm65.long.ok.gtf | head -1
+----
+----
+chr4	ENSEMBL	#gene#	116791824	116798271	.	-	.	gene_id "ENSMUSG00000073771"; transcript_id "ENSMUSG00000073771"; gene_type "protein_coding"; gene_status "NULL"; gene_name "Btbd19"; transcript_type "protein_coding"; transcript_status "NULL"; transcript_name "Btbd19";
+----
+[source,cmd,subs="+quotes"]
+----
+awk '$3=="transcript"' ~ngs00/refs/mm65.long.ok.gtf | head -1
+----
+----
+chr13	ENSEMBL	transcript	19305972	19308487	.	+	.	gene_id "ENSMUSG00000076749"; transcript_id "ENSMUST00000103558"; exon_number "1"; gene_name "Gm17004"; gene_type "IG_C_gene"; transcript_name "Gm17004-201"; transcript_type "IG_C_gene";
 ----

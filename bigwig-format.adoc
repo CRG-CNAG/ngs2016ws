@@ -5,6 +5,8 @@
 
 The `bigWig` format is for display of dense, continuous data. `BigWig` data can be displayed in the UCSC Genome Browser as a graph. `BigWig` files are created initially from `bedGraph` or `wiggle` type files. The resulting `bigWig` files are in an indexed binary format. The main advantage of the `bigWig` files is that only the portions of the files needed to display a particular region are transferred to UCSC, so for large data sets `bigWig` is considerably faster than regular files. The `bigWig` file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
 
+We will see an example of BigWig usage in the section <<RNA-seq data visualization in the UCSC Genome Browser>>.
+
 == BedGraph
 
 The `bedGraph` format allows display of continuous-valued data. This display type is useful for values like probability scores and transcriptome data. It is also widely used to define the data lines that are displayed in a track of the UCSC genome browser. The `bedGraph` format is also an older format used to display sparse data or data that contains elements of varying size.
