@@ -6,7 +6,7 @@
 :login-node: ngs-login
 == Connect to the cluster
 
-To connect to the cluster login node type:
+In order to connect to the cluster type the following command:
 
 [source,cmd,subs="+attributes"]
 ----
