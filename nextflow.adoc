@@ -1,23 +1,23 @@
 = Nextflow
 
-Nextflow is a framework that simplifies writing complex parallel computational 
-pipelines in a portable and reproducible manner. Parallelization is automatically managed 
-by the framework and it is implicitly defined by the processes input and output declarations. 
- 
-The built-in support for https://www.docker.com[Docker] containers technology and the https://www.github.com[Github] 
-sharing platform enables pipelines to be deployed, along with all their dependencies, across 
-multiple platforms without any modifications, making it possible to share them and replicate 
+Nextflow is a framework that simplifies writing complex parallel computational
+pipelines in a portable and reproducible manner. Parallelization is automatically managed
+by the framework and it is implicitly defined by the processes input and output declarations.
+
+The built-in support for https://www.docker.com[Docker] containers technology and the https://www.github.com[Github]
+sharing platform enables pipelines to be deployed, along with all their dependencies, across
+multiple platforms without any modifications, making it possible to share them and replicate
 their results in a predictable manner.
- 
+
 
 == Installing Nextflow
 
-Nextflow is a command line tool. It only requires a Unix-like operating system and a Java 7/8 available 
-in the running environment. 
-  
+Nextflow is a command line tool. It only requires a Unix-like operating system and a Java 7/8 available
+in the running environment.
+
 It can be installed with the following command:
 
-[source,bash]
+[source,cmd]
 ----
 curl -fsSL get.nextflow.io | bash
 mv nextflow ~/bin
@@ -25,12 +25,10 @@ mv nextflow ~/bin
 
 Check the installed version:
 
-[source,bash]
+[source,cmd]
 ----
 nextflow info
 ----
-
-[source,bash]
 ----
   Version: 0.17.3 build 3495
   Modified: 18-02-2016 11:00 UTC (12:00 CEST)
@@ -43,45 +41,45 @@ nextflow info
 
 == Basic script
 
-Write a basic script to count the number of transcripts and exons in a gene annotation file. 
+Write a basic script to count the number of transcripts and exons in a gene annotation file.
 
 [source]
 ----
 #!/usr/bin/env nextflow
 echo true
-annotation = Channel.fromPath('rnaseq/refs/mm65.long.ok.gtf')
+annotation = Channel.fromPath('~ngs00/refs/mm65.long.ok.gtf')
 
 process count {
 
-  input: 
-  file 'annotation.gtf' from annotation 
+  input:
+  file 'annotation.gtf' from annotation
 
-  '''  
+  '''
   grep Sec23a annotation.gtf > Sec23a.gff
-  awk '$3=="transcript"' Sec23a.gff | wc -l 
+  awk '$3=="transcript"' Sec23a.gff | wc -l
   awk '$3=="exon"' Sec23a.gff | wc -l
   '''
 }
 ----
 
-This examples introduces the basic syntax of a Nextflow process and shows how to execute 
-any existing piece of code or script available in the hosting environment. 
+This examples introduces the basic syntax of a Nextflow process and shows how to execute
+any existing piece of code or script available in the hosting environment.
 
-Save the code showed above in a file named `tutorial1.nf`, then run it using the following 
-command: 
+Save the code showed above in a file named `tutorial1.nf`, then run it using the following
+command:
 
-[source,bash]
+[source,cmd]
 ----
 nextflow run tutorial1.nf
 ----
 
-== Using parameters 
+== Using parameters
 
-Parameters allow the same script to be used specifying different input values.  
+Parameters allow the same script to be used specifying different input values.
 
-By convention Nextflow parameters are defined at the top of the script file 
-providing a default value for each of them. The actual parameter value can 
-be provided on the launch command line as an extra option.  
+By convention Nextflow parameters are defined at the top of the script file
+providing a default value for each of them. The actual parameter value can
+be provided on the launch command line as an extra option.
 
 [source]
 ----
@@ -89,34 +87,34 @@ be provided on the launch command line as an extra option.
 echo true
 
 params.gene = 'Sec23a'
-params.annot = 'rnaseq/refs/mm65.long.ok.gtf'
+params.annot = '~ngs00/refs/mm65.long.ok.gtf'
 
 annotation = Channel.fromPath(params.annot)
 
 process count {
-  input: 
-  file 'annotation.gtf' from annotation 
-  
+  input:
+  file 'annotation.gtf' from annotation
+
   shell:
-  '''  
+  '''
   grep !{params.gene} annotation.gtf > gff
-  awk '$3=="transcript"' gff | wc -l 
+  awk '$3=="transcript"' gff | wc -l
   awk '$3=="exon"' gff | wc -l
   '''
 }
 ----
 
-Save the above code in a file named `tutorial2.nf`, then run it using the command 
-showed below: 
+Save the above code in a file named `tutorial2.nf`, then run it using the command
+showed below:
 
-[source,bash]
+[source,cmd]
 ----
 nextflow run tutorial2.nf
 ----
 
 Try to execute it providing a different gene name of annotation file. For example:
 
-[source,bash]
+[source,cmd]
 ----
 nextflow run tutorial2.nf --gene Sec1
 :
@@ -124,10 +122,10 @@ nextflow run tutorial2.nf --annot <TODO>
 ----
 
 
-== Parallel execution 
+== Parallel execution
 
-Nextflow processes are implicitly executed in a parallel manner whenever multiple inputs 
-are provided. 
+Nextflow processes are implicitly executed in a parallel manner whenever multiple inputs
+are provided.
 
 [source]
 ----
@@ -135,67 +133,67 @@ are provided.
 echo true
 
 params.gene = 'Sec23a'
-params.annot = 'rnaseq/refs/mm65.long.ok.gtf'
+params.annot = '~ngs00/refs/mm65.long.ok.gtf'
 
 annotation = Channel.fromPath(params.annot)
 genes = params.gene.tokenize(', ')
 
 process count {
-  input: 
-  file 'annotation.gtf' from annotation 
+  input:
+  file 'annotation.gtf' from annotation
   each gene from genes
- 
+
   shell:
-  '''  
-  echo !{gene} 
+  '''
+  echo !{gene}
   grep !{gene} annotation.gtf > gff
-  awk '$3=="transcript"' gff | wc -l 
+  awk '$3=="transcript"' gff | wc -l
   awk '$3=="exon"' gff | wc -l
   '''
 }
 ----
 
-Save the above content to a file named `tutorial3.nf`, then run it proving more than an 
-annotation file as shown below: 
+Save the above content to a file named `tutorial3.nf`, then run it proving more than an
+annotation file as shown below:
 
-[source,base]
+[source,cmd]
 ----
 nextflow run tutorial4.nf --annot '.. *'
 ----
 
 Each of file matching the specified glob pattern will trigger the execution
-of a parallel `count` process. 
+of a parallel `count` process.
 
- 
-== Collect results 
 
-This example shows how collect the result produced by multiple parallel process 
-into a file and 
+== Collect results
+
+This example shows how collect the result produced by multiple parallel process
+into a file and
 
 [source]
 ----
 #!/usr/bin/env nextflow
 
 params.gene = 'Sec23a'
-params.annot = 'rnaseq/refs/mm65.long.ok.gtf'
+params.annot = '~ngs00/refs/mm65.long.ok.gtf'
 
 annotation = Channel.fromPath(params.annot)
 genes = params.gene.tokenize(', ')
 
 process count {
-  input: 
+  input:
   each gene from genes
-  file annot from annotation 
- 
+  file annot from annotation
+
   output:
   stdout into result
 
   shell:
-  '''  
+  '''
   echo !{annot.baseName}
-  echo !{gene} 
+  echo !{gene}
   grep !{gene} !{annot} > gff
-  awk '$3=="transcript"' gff | wc -l 
+  awk '$3=="transcript"' gff | wc -l
   awk '$3=="exon"' gff | wc -l
   '''
 }
@@ -205,20 +203,20 @@ result
     .collectFile(newLine: true)  // <2>
     .println { it.text }  // <3>
 ----
-  
-  
+
+
 <1> The `map` operator transform the multi-line output into a comma-separated line
 <2> The `collectFile` operator gathers the produced lines and append them into a file.
-<3> The `println` operator prints the file content.   
+<3> The `println` operator prints the file content.
 
 
-== Use a computing cluster 
+== Use a computing cluster
 
 When a pipeline runs many computing intensive tasks a batch scheduler is required
-to submit the job executions in a cluster of computer. 
+to submit the job executions in a cluster of computer.
 
-Nextflow manages the execution with the batch scheduler in a transparent manner 
-without any change in the pipeline code. It only requires a few settings in the 
+Nextflow manages the execution with the batch scheduler in a transparent manner
+without any change in the pipeline code. It only requires a few settings in the
 pipeline configuration file:
 
 [source]
@@ -230,26 +228,26 @@ process {
 }
 ----
 
-Save the content showed above in a file named `nextflow.config`, then launch 
-the script execution as before: 
+Save the content showed above in a file named `nextflow.config`, then launch
+the script execution as before:
 
-[source,bash]
+[source,cmd]
 ----
-nextflow run tutorial4.nf -bg > log 
+nextflow run tutorial4.nf -bg > log
 ----
 
-You can check tasks are submitted to the cluster using the following command: 
+You can check tasks are submitted to the cluster using the following command:
 
-[source,bash]
+[source,cmd]
 ----
 qstat
 ----
- 
-The following platforms are currently supported: 
+
+The following platforms are currently supported:
 
 * Sun/Open Grid Engine
 * Univa Grid Engine
 * Linux SLURM
 * IBM LSF
-* Torque/PBS 
+* Torque/PBS
 
