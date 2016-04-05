@@ -6,14 +6,12 @@
 :login-node: ngs-login
 == Connect to the cluster
 
-In order to connect to the cluster type the following command:
+In order to connect to the cluster type the following command, replacing `{user}` with your username:
 
 [source,cmd,subs="+attributes"]
 ----
 ssh -Y {user}@{login-node}.linux.crg.es
 ----
-
-Replace `{user}` with your username.
 
 The `-Y` option allows graphical output (**X11** forwarding).
 // end::access[]
