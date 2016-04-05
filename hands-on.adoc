@@ -1,4 +1,4 @@
-= NGS 2016 Workshop Hands-on
+= NGS 2016 Workshop Hands-on image:NGS_LOGO.png[Logo,120,120,float="right"]
 :hide-uri-scheme:
 :nofooter:
 :icons: font
@@ -16,22 +16,13 @@ ifeval::["{backend}" == "pdf"]
 :cheatsheet: cheatsheet,at the end of this document
 endif::[]
 
-[discrete]
-== Introduction
-
-The default directory is the rnaseq directory in your home, if nothing else is specified.
-
 The RNA-seq data comes from brain samples (CNS) of mouse embryos at day 14 and day 18, done in 2 bioreplicates (1% of the reads are randomly sampled here).
-
-In order to gain time, mapping, bigwig and quantification processes will only be done with one sample, however the analysis will use all 4 samples.
-
-When you are waiting for a job to complete, please look at the input, output and help of the different programs run until that point.
 
 NOTE: A cheatsheet with basic Linux and Cluster commands is available <<{cheatsheet}>>.
 
 :sectnums:
 
-include::ant-cluster.adoc[tags=access]
+include::cluster.adoc[tags=access]
 
 :leveloffset: +1
 
