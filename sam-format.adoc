@@ -91,6 +91,8 @@ mouse_cns_E18_rep1_m4_n10_toGenome.bam
 mouse_cns_E18_rep1_m4_n10_toGenome.bam.bai
 ----
 
+We will have a look at the contents of a BAM file in the <<GRAPE>> section.
+
 == CRAM
 
 CRAM is a framework technology with highly efficient and tunable reference-based compression of sequence data  and a data format

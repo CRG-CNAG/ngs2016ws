@@ -39,7 +39,7 @@ NOTE: since the pipeline has beed already pulled to the local system we can omit
 
 == Setup
 
-We need to create a working directory for the pipeline run. Create a folder named `grape` in your home folder and go inside the folder:
+We need to create a base directory for the pipeline run. Create a folder named `grape` in your home folder and go inside the folder:
 
 [source,cmd]
 ----
@@ -57,7 +57,7 @@ mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_1.fastq.gz	fastq	FqRd1
 mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_2.fastq.gz	fastq	FqRd2
 ----
 
-You can have have a look at the index file for the workshop:
+You can have have a look at the input index file for the workshop:
 
 [source,cmd,subs='attributes']
 ----
@@ -106,7 +106,6 @@ Grape uses Nextflow profiles to define the set of tools to be used for the pipel
 | starflux | STAR for mapping and RNAseq Signal, custom script for Contig and FluxCapacitor for gene and transcripts expression
 						 quantification
 |===
-plus
 
 Profiles can be specified explicitly on the command line. There is also a `standard` profile used as the default when no profile is specified. For Grape, it is the same as `starrsem` plus an additional configuration option and we are going to use this profile. It looks like:
 
@@ -140,23 +139,27 @@ Output files db -> /nfs/users/ngs00/grape/pipeline.db
 ===============
 
 [warm up] executor > sge
-[0a/d995a5] Submitted process > fastaIndex (mouse_genome_mm9-SAMtools-0.1.19)
-[#0c/bdee61#] Submitted process > mapping (mouse_cns_E18_rep1-STAR-2.4.0j)
-[e4/ad3136] Submitted process > mapping (mouse_cns_E18_rep2-STAR-2.4.0j)
-[10/0dda21] Submitted process > mapping (mouse_cns_E14_rep1-STAR-2.4.0j)
-[35/a3b3ce] Submitted process > mapping (mouse_cns_E14_rep2-STAR-2.4.0j)
+[c3/ecc8e6] Submitted process > fastaIndex (mouse_genome_mm9-SAMtools-0.1.19)
+[26/3dba1e] Submitted process > mapping (mouse_cns_E14_rep1-STAR-2.4.0j)
+[49/30e442] Submitted process > mapping (mouse_cns_E18_rep2-STAR-2.4.0j)
+[#00/681c79#] Submitted process > mapping (mouse_cns_E18_rep1-STAR-2.4.0j)
+[d0/1f18c1] Submitted process > mapping (mouse_cns_E14_rep2-STAR-2.4.0j)
 icon:circle-o-notch[pulse]
 ----
 
-The highlighted string specifies the prefix of the process working folder. It is relative to the pipeline working folder which, by default, is `work` inside the current folder. To get the full name of the folder you need to use bash `autocompletion` feature. Type the path to the folder, include the prefix and press kbd:[TAB]. For the previous example process:
+The highlighted string specifies the prefix of the process folder. It is relative to the pipeline working folder which, by default, is `work` inside the base folder. To get the full name of the folder you need to use bash `autocompletion` feature. Type the path to the folder, include the prefix and press kbd:[TAB]. For the previous example process:
 
-[subs="specialchars,attributes,quotes,replacements,macros,post_replacements"]
+[source,cmd,subs="specialchars,attributes,quotes,replacements,macros,post_replacements"]
 ----
-ls /nfs/users/ngs00/grape/work/0c/bdee61kbd:[TAB]0ed75e20bc6b47339257eeb9//
+ls /nfs/users/ngs00/grape/work/00/681c79kbd:[TAB]
+----
+----
+ls /nfs/users/ngs00/grape/work/00/681c79f509a8b084d19a57f6abf784/
 ----
 
-If the run finishes wihtout errors the pipeline log file ends with a success message:
+If the run finishes without errors the `pipeline.log` file ends with a success message:
 
+[subs="+replacements"]
 ----
 ...
 

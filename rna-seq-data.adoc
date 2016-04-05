@@ -3,112 +3,27 @@
 
 All the data needed for the workshop can be found in:
 
-[source,bash, subs="attributes"]
+[subs="attributes"]
 ----
 /users/{user}
 ----
 
-The setup script copies all the required files into the `rnaseq` folder under your `$HOME`. You can see the contents of the directory in a tree-like format as follows:
+You can see the contents of the directory:
 
-[source,bash]
+[source,cmd]
 ----
-tree ~ngs00
+ls -l ~ngs00
 ----
-
-And this should be the output:
-
-[source,bash]
 ----
-/users/ngs00
-├── bin
-│   ├── hubCheck
-│   ├── nextflow
-│   └── ngs-grape
-├── data
-│   ├── index.tsv
-│   ├── mouse_cns_E14_rep1_1.fastq.gz
-│   ├── mouse_cns_E14_rep1_2.fastq.gz
-│   ├── mouse_cns_E14_rep2_1.fastq.gz
-│   ├── mouse_cns_E14_rep2_2.fastq.gz
-│   ├── mouse_cns_E18_rep1_1.fastq.gz
-│   ├── mouse_cns_E18_rep1_2.fastq.gz
-│   ├── mouse_cns_E18_rep2_1.fastq.gz
-│   └── mouse_cns_E18_rep2_2.fastq.gz
-├── env
-├── grape
-│   └── nextflow.config
-├── ngs.config
-├── public_docs
-│   ├── custom_tracks
-│   │   ├── mouse_cns_E14_rep1_m4_n10_toGenome.bam
-│   │   ├── mouse_cns_E14_rep1.Unique.minusRaw.bw
-│   │   ├── mouse_cns_E14_rep1.Unique.plusRaw.bw
-│   │   ├── mouse_cns_E14_rep2_m4_n10_toGenome.bam
-│   │   ├── mouse_cns_E14_rep2.Unique.minusRaw.bw
-│   │   ├── mouse_cns_E14_rep2.Unique.plusRaw.bw
-│   │   ├── mouse_cns_E18_rep1_m4_n10_toGenome.bam
-│   │   ├── mouse_cns_E18_rep1.Unique.minusRaw.bw
-│   │   ├── mouse_cns_E18_rep1.Unique.plusRaw.bw
-│   │   ├── mouse_cns_E18_rep2_m4_n10_toGenome.bam
-│   │   ├── mouse_cns_E18_rep2.Unique.minusRaw.bw
-│   │   └── mouse_cns_E18_rep2.Unique.plusRaw.bw
-│   ├── prova
-│   └── track_hub
-│       ├── dataFiles.list
-│       ├── genomes.txt
-│       ├── hub.txt
-│       ├── mm9
-│       │   └── trackDb.txt
-│       ├── mm9_cns_E14_rep1_m4_n10_toGenome.bam
-│       ├── mm9_cns_E14_rep1_Unique_minusRaw.bw
-│       ├── mm9_cns_E14_rep1_Unique_plusRaw.bw
-│       ├── mm9_cns_E14_rep2_m4_n10_toGenome.bam
-│       ├── mm9_cns_E14_rep2_Unique_minusRaw.bw
-│       ├── mm9_cns_E14_rep2_Unique_plusRaw.bw
-│       ├── mm9_cns_E18_rep1_m4_n10_toGenome.bam
-│       ├── mm9_cns_E18_rep1_Unique_minusRaw.bw
-│       ├── mm9_cns_E18_rep1_Unique_plusRaw.bw
-│       ├── mm9_cns_E18_rep2_m4_n10_toGenome.bam
-│       ├── mm9_cns_E18_rep2_Unique_minusRaw.bw
-│       ├── mm9_cns_E18_rep2_Unique_plusRaw.bw
-│       ├── trackHubDefinition.json
-│       └── trackHubDefinition.json~
-├── quickTrackHub
-│   ├── LICENSE
-│   ├── processJsonToHash.pm
-│   ├── quickTrackHub.pl
-│   ├── README.md
-│   └── trackHubDefinition.json
-└── refs
-    ├── dmel-all-no-analysis-r6.05.gtf
-    ├── gencode.v22.annotation.gtf
-    ├── mm65.long.ok.gtf
-    ├── mouse_genome_mm9.fa
-    ├── mouse_genome_mm9.fa.fai
-    ├── mouse_genome_mm9_RSEM_index
-    │   ├── RSEMref.chrlist
-    │   ├── RSEMref.grp
-    │   ├── RSEMref.idx.fa
-    │   ├── RSEMref.n2g.idx.fa
-    │   ├── RSEMref.seq
-    │   ├── RSEMref.ti
-    │   └── RSEMref.transcripts.fa
-    └── mouse_genome_mm9_STAR_index
-        ├── chrLength.txt
-        ├── chrNameLength.txt
-        ├── chrName.txt
-        ├── chrStart.txt
-        ├── exonGeTrInfo.tab
-        ├── exonInfo.tab
-        ├── geneInfo.tab
-        ├── Genome
-        ├── genomeParameters.txt
-        ├── SA
-        ├── SAindex
-        ├── sjdbInfo.txt
-        ├── sjdbList.fromGTF.out.tab
-        ├── sjdbList.out.tab
-        └── transcriptInfo.tab
-
-13 directories, 76 files
+total 158
+drwxr-xr-x 3 ngs00 ngs   79 Apr  1 18:06 bin
+drwxrwxr-x 2 ngs00 ngs  403 Mar 30 12:20 data
+drwxr-xr-x 2 ngs00 ngs   25 Apr  4 13:55 env
+drwxr-xr-x 3 ngs00 ngs  401 Apr  5 10:17 grape
+drwxr-xr-x 4 ngs00 ngs  488 Apr  4 15:12 nextflow
+-rw-r--r-- 1 ngs00 ngs 1887 Apr  1 15:55 ngs.config
+drwxr-xr-x 4 ngs00 ngs   93 Apr  5 10:49 public_docs
+drwxr-xr-x 3 ngs00 ngs  187 Apr  4 11:15 quickTrackHub
+drwxrwxr-x 3 ngs00 ngs  204 Apr  5 09:31 refs
+drwxr-xr-x 3 ngs00 ngs  121 Apr  4 12:11 rnatoy
 ----
