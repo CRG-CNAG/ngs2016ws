@@ -125,7 +125,7 @@ done
 +
 Copy the output
 
-* Switch to your Web Browser, paste the URLs into the "Paste URLs or data:" text box and clisk "Submit". Your data will then be uploaded to UCSC servers.
+* Switch to your Web Browser, paste the URLs into the "Paste URLs or data:" text box and clisk "Submit". Your data will then be fetched by UCSC servers.
 
 * Check out our two gene examples:
 
@@ -159,7 +159,7 @@ http://genome.cse.ucsc.edu/goldenPath/help/hgTrackHubHelp.html[Track Hubs^] are 
 |=======================
 |     |Custom Tracks      | Track Hubs
 |*Configure tracks by groups*  | No  | Yes
-|*Where is the data?*  | Uploaded to UCSC servers     | Stays on your server
+|*Where is the data?*  | Uploaded to UCSC servers (except binary indexed files)    | Stays on your server
 |*Accepted file types* | All most common (BED, GTF, etc.) | Only binary indexed (bigWig, bigBed, BAM+BAI)
 |*How long will it live?*     |48h     | "Forever"
 |*On exotic genome assemblies?*    |No | Yes (http://genomewiki.ucsc.edu/index.php/Assembly_Hubs[Assembly hubs^])
@@ -167,8 +167,6 @@ http://genome.cse.ucsc.edu/goldenPath/help/hgTrackHubHelp.html[Track Hubs^] are 
 
 
 Although originally developed at UCSC, they are also http://www.ensembl.org/info/website/adding_trackhubs.html[supported by ENSEMBL^].
-
-WARNING: ENSEMBL doesn't accept mm9 track hubs any longer, so our test dataset won't work in it.
 
 
 Track Hubs are very powerful: they allow you to reach the same level of sophistication as some "core" ENCODE tracks such as http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeCshlLongRnaSeq[this one^]:
@@ -184,15 +182,25 @@ Here we will use the https://github.com/julienlag/quickTrackHub[`quickTrackHub`^
 * The idea is to group similar tracks together, based on their associated metadata (represented in their file names). Let's see what our grouping options are:
 +
 image:grouping.png[grouping,550,550, align="center"]
++
+We can organize our tracks the following way:
++
+** One `superTrack` per *[blue]#file type#* :
+*** BAM: `ReadAligns`
+*** bigWig: `ReadSignal`
+** Split each superTrack into `composite` dimensions:
+*** (*[purple]#tissue#* , *[red]#lifeStage#*) (matrix's `X` dimension)
+*** *[green]#replicate#* (matrix's `Y` dimension)
+*** *[fuchsia]#strand#* (for bigWigs only)
 
 * `quickTrackHub` will:
 ** Read a Track Hub Definition File (JSON) that contain:
-*** Basic track settings (URL, name, visibility, etc.)
+*** Basic track settings (genome assembly, URL, name, visibility, etc.)
 *** Track grouping instructions
 *** Filename parsing instructions (_i.e._ how to extract metadata from filenames)
 +
 [source,json]
-.trackHubDefinition.json
+.trackHubDefinition.json example
 ----
 {
 	"longLabel" : "ENCODE GRAPE sample data track hub, user ngs00",
@@ -262,8 +270,6 @@ image:grouping.png[grouping,550,550, align="center"]
 			"fileExtension" : -1
 		}
 	}
-
-
 }
 ----
 ** Output the corresponding Track Hub file and directory structure that will be parsed by UCSC.
