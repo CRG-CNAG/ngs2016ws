@@ -311,3 +311,64 @@ nextflow run tutorial4.nf --annot '/users/ngs00/refs/*.gtf' --gene Sec23a,Tulp2,
 
 Only the tasks for which a new input is specified will be executed.
 
+
+== Integration with GitHub
+
+Nextflow provides built-in support for the https://git-scm.com/[Git] tool and the https://github.com[GitHub] source code management 
+plaftorm. This makes it possible to share and deploy a pipeline hosted in the GitHub 
+platform with ease. 
+
+For the sake of this tutorial we will use https://github.com/nextflow-io/rnatoy[RNA-Toy], 
+a proof of concept RNA-Seq pipeline implemented with Nextflow.
+
+The pipeline uses the following tools: 
+
+* http://bowtie-bio.sourceforge.net/bowtie2/index.shtml[Bowtie2] 
+* https://ccb.jhu.edu/software/tophat/index.shtml[TopHat2] 
+* http://cole-trapnell-lab.github.io/cufflinks/[Cufflinks] 
+
+In order to setup the required pipeline dependencies we will use http://modules.sourceforge.net/[Environment Modules].
+
+Add the following setting in your `nextflow.config` file: 
+
+----
+process { 
+  module = 'Boost/1.55.0-goolf-1.4.10-no-OFED-Python-2.7.6:Python/2.7.8-goolf-1.4.10-no-OFED:Bowtie2/2.2.8-goolf-1.4.10-no-OFED:TopHat/2.1.0-goolf-1.4.10-no-OFED:Cufflinks/2.2.1-goolf-1.4.10-no-OFED'
+} 
+----
+
+Launch the pipeline execution using the following command: 
+
+[source,cmd]
+----
+nextflow run nextflow-io/rnatoy
+----
+
+The above command will automatically pull the pipeline from the GitHub repository and run it  
+using a dataset included in the pipeline itself. 
+
+Users can provide its own dataset specifying it on the launch command line.
+
+== Docker containers 
+
+In the previous example we still needed to configure one by one the tools used by the pipeline 
+by loading the corresponding environment modules. 
+
+Nextflow provides built-in support for https://www.docker.com/[Docker] containers that 
+allows binary dependencies to be deployed automatically when the pipeline is executed.  
+
+Having the Docker engine installed, the previous example can be executed simply using 
+the following command:
+
+[source,cmd]
+----
+nextflow run nextflow-io/rnatoy -with-docker 
+----
+
+The `-with-docker` command line option instructs Nextflow to pull the Docker image defined 
+in the pipeline execution file. The image contains all the binary dependencies required to 
+run the pipeline script (i.e. Bowtie, TopHat, Cufflinks, etc.) thus it is not need 
+to configure them manually. 
+
+This greatly simplify the pipeline deployment process and guarantee consistent results over time and 
+across different platforms. 
