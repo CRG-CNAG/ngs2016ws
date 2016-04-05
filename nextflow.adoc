@@ -310,5 +310,5 @@ will be executed. For example:
 nextflow run tutorial4.nf --annot '/users/ngs00/refs/*.gtf' --gene Sec23a,Tulp2,Trex2 -resume
 ---- 
 
-Only the tasks for which a new input is specified will be launched. 
+Only the tasks for which a new input is specified will be executed. 
 
