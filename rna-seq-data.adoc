@@ -20,7 +20,6 @@ drwxr-xr-x 3 ngs00 ngs   79 Apr  1 18:06 bin
 drwxrwxr-x 2 ngs00 ngs  403 Mar 30 12:20 data
 drwxr-xr-x 2 ngs00 ngs   25 Apr  4 13:55 env
 drwxr-xr-x 3 ngs00 ngs  401 Apr  5 10:17 grape
-drwxr-xr-x 3 ngs00 ngs  430 Apr  1 20:46 grape-old
 drwxr-xr-x 4 ngs00 ngs  488 Apr  4 15:12 nextflow
 -rw-r--r-- 1 ngs00 ngs 1887 Apr  1 15:55 ngs.config
 drwxr-xr-x 4 ngs00 ngs   93 Apr  5 10:49 public_docs
