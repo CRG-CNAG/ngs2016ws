@@ -684,9 +684,9 @@ b.conum * { color: inherit !important; }
 
 .crg { color: #189acb; }
 
-pre > code.language-cmd { display: block; color: #e6e6e6; background-color: #333333; }
-
-pre > code.language-cmd-light { display: block; background-color: #E2E2E2; }
+pre > code.language-cmd { display: block; }
+@media screen { pre > code.language-cmd { color: #e6e6e6; background-color: #333333; } }
+@media print { pre > code.language-cmd { background-color: #E2E2E2; } }
 
 dt, th.tableblock, td.content, div.footnote { text-rendering: optimizeLegibility; }
 
