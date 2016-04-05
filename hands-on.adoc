@@ -16,7 +16,7 @@ ifeval::["{backend}" == "pdf"]
 :cheatsheet: cheatsheet,at the end of this document
 endif::[]
 
-The RNA-seq data comes from brain samples (CNS) of mouse embryos at day 14 and day 18, done in 2 bioreplicates (1% of the reads are randomly sampled here).
+The RNA-seq data comes from brain samples (CNS) of mouse embryos at day 14 and day 18, done in 2 bioreplicates (1% of the original reads randomly sampled).
 
 NOTE: A cheatsheet with basic Linux and Cluster commands is available <<{cheatsheet}>>.
 
