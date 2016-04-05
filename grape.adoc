@@ -39,7 +39,7 @@ NOTE: since the pipeline has beed already pulled to the local system we can omit
 
 == Setup
 
-We need to create a working directory for the pipeline run. Create a folder named `grape` in your home folder and go inside the folder:
+We need to create a base directory for the pipeline run. Create a folder named `grape` in your home folder and go inside the folder:
 
 [source,cmd]
 ----
@@ -57,7 +57,7 @@ mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_1.fastq.gz	fastq	FqRd1
 mouse_cns_E14_rep1	mouse_cns_E14_rep1	mouse_cns_E14_rep1_2.fastq.gz	fastq	FqRd2
 ----
 
-You can have have a look at the index file for the workshop:
+You can have have a look at the input index file for the workshop:
 
 [source,cmd,subs='attributes']
 ----
@@ -147,7 +147,7 @@ Output files db -> /nfs/users/ngs00/grape/pipeline.db
 icon:circle-o-notch[pulse]
 ----
 
-The highlighted string specifies the prefix of the process working folder. It is relative to the pipeline working folder which, by default, is `work` inside the current folder. To get the full name of the folder you need to use bash `autocompletion` feature. Type the path to the folder, include the prefix and press kbd:[TAB]. For the previous example process:
+The highlighted string specifies the prefix of the process folder. It is relative to the pipeline working folder which, by default, is `work` inside the base folder. To get the full name of the folder you need to use bash `autocompletion` feature. Type the path to the folder, include the prefix and press kbd:[TAB]. For the previous example process:
 
 [source,cmd,subs="specialchars,attributes,quotes,replacements,macros,post_replacements"]
 ----
@@ -157,7 +157,7 @@ ls /nfs/users/ngs00/grape/work/00/681c79kbd:[TAB]
 ls /nfs/users/ngs00/grape/work/00/681c79f509a8b084d19a57f6abf784/
 ----
 
-If the run finishes wihtout errors the pipeline log file ends with a success message:
+If the run finishes without errors the `pipeline.log` file ends with a success message:
 
 [subs="+replacements"]
 ----
