@@ -1,4 +1,5 @@
-= [[grape]]GRAPE
+[[grape]]
+= GRAPE
 :user: ngs00
 :grape-github: https://github.com/guigolab/grape-nf
 
