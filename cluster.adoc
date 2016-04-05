@@ -4,7 +4,8 @@
 // tag::access[]
 :user: ngsXX
 :login-node: ngs-login
-== Access the CRG cluster
+:cluster-name: NGS
+== Access the {cluster-name} cluster
 
 To connect to the cluster login node type:
 
